@@ -1,0 +1,5 @@
+node_modules/
+public/uploads/
+data/products.json
+*.log
+.DS_Store
