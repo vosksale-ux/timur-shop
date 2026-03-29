@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIMUR.SHOP | Кожаные изделия</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container header-wrap">
+            <div class="logo">TIMUR<span>.SHOP</span></div>
+            <nav class="nav-links">
+                <a href="#catalog">Каталог</a>
+                <a href="#about">О нас</a>
+                <a href="#contacts">Контакты</a>
+            </nav>
+            <button class="cart-btn" onclick="openCart()">
+                🛒 <span id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Вещи с <span class="accent">характером</span></h1>
+            <p>Натуральная кожа. Ручная работа. Честная цена.</p>
+            <a href="#catalog" class="btn">Смотреть каталог</a>
+        </div>
+    </section>
+
+    <section id="catalog" class="catalog">
+        <div class="container">
+            <h2 class="section-title">Каталог изделий</h2>
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterProducts('all')">Все</button>
+                <button class="filter-btn" onclick="filterProducts('accessories')">Аксессуары</button>
+                <button class="filter-btn" onclick="filterProducts('wallets')">Кошельки</button>
+                <button class="filter-btn" onclick="filterProducts('belts')">Ремни</button>
+                <button class="filter-btn" onclick="filterProducts('covers')">Чехлы и обложки</button>
+                <button class="filter-btn" onclick="filterProducts('bags')">Сумки</button>
+            </div>
+            <div class="products">
+
+                <div class="product" data-category="accessories">
+                    <div class="product-img">🔑</div>
+                    <div class="product-info">
+                        <h3>Брелок кожаный</h3>
+                        <p>Компактный брелок из натуральной кожи</p>
+                        <div class="product-footer">
+                            <span class="price">350 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Брелок кожаный', 350)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="accessories">
+                    <div class="product-img">📿</div>
+                    <div class="product-info">
+                        <h3>Браслет</h3>
+                        <p>Кожаный браслет с магнитной застёжкой</p>
+                        <div class="product-footer">
+                            <span class="price">500 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Браслет', 500)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="accessories">
+                    <div class="product-img">📖</div>
+                    <div class="product-info">
+                        <h3>Закладка для книг</h3>
+                        <p>Тонкая кожаная закладка с тиснением</p>
+                        <div class="product-footer">
+                            <span class="price">400 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Закладка для книг', 400)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="accessories">
+                    <div class="product-img">🗝️</div>
+                    <div class="product-info">
+                        <h3>Ключница</h3>
+                        <p>На 6 ключей, застёжка на кнопке</p>
+                        <div class="product-footer">
+                            <span class="price">750 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Ключница', 750)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="wallets">
+                    <div class="product-img">💳</div>
+                    <div class="product-info">
+                        <h3>Картхолдер</h3>
+                        <p>Вместимость 5 карт, компактный</p>
+                        <div class="product-footer">
+                            <span class="price">900 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Картхолдер', 900)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="wallets">
+                    <div class="product-img">👛</div>
+                    <div class="product-info">
+                        <h3>Кошелёк</h3>
+                        <p>Два отделения, монетница на молнии</p>
+                        <div class="product-footer">
+                            <span class="price">2 000 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Кошелёк', 2000)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="wallets">
+                    <div class="product-img">💼</div>
+                    <div class="product-info">
+                        <h3>Портмоне</h3>
+                        <p>Премиум. Место для купюр и 8 карт</p>
+                        <div class="product-footer">
+                            <span class="price">2 500 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Портмоне', 2500)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="wallets">
+                    <div class="product-img">📄</div>
+                    <div class="product-info">
+                        <h3>Документ-кошелёк</h3>
+                        <p>Для документов и карт, на молнии</p>
+                        <div class="product-footer">
+                            <span class="price">1 800 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Документ-кошелёк', 1800)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="belts">
+                    <div class="product-img">👔</div>
+                    <div class="product-info">
+                        <h3>Ремень классический</h3>
+                        <p>Ширина 4 см, пряжка из стали</p>
+                        <div class="product-footer">
+                            <span class="price">1 500 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Ремень классический', 1500)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="belts">
+                    <div class="product-img">🩳</div>
+                    <div class="product-info">
+                        <h3>Ремень узкий</h3>
+                        <p>Ширина 2.5 см, женский/универсальный</p>
+                        <div class="product-footer">
+                            <span class="price">1 200 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Ремень узкий', 1200)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="covers">
+                    <div class="product-img">📕</div>
+                    <div class="product-info">
+                        <h3>Обложка на паспорт</h3>
+                        <p>С кармашком для документов</p>
+                        <div class="product-footer">
+                            <span class="price">700 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Обложка на паспорт', 700)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="covers">
+                    <div class="product-img">🪪</div>
+                    <div class="product-info">
+                        <h3>Обложка на автодокументы</h3>
+                        <p>Формат А5, внутри карманы</p>
+                        <div class="product-footer">
+                            <span class="price">650 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Обложка на автодокументы', 650)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="covers">
+                    <div class="product-img">📱</div>
+                    <div class="product-info">
+                        <h3>Чехол для AirPods</h3>
+                        <p>Натуральная кожа, плотная посадка</p>
+                        <div class="product-footer">
+                            <span class="price">600 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Чехол для AirPods', 600)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="covers">
+                    <div class="product-img">📱</div>
+                    <div class="product-info">
+                        <h3>Подставка под телефон</h3>
+                        <p>Кожа + дерево, складная</p>
+                        <div class="product-footer">
+                            <span class="price">800 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Подставка под телефон', 800)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product" data-category="bags">
+                    <div class="product-img">👜</div>
+                    <div class="product-info">
+                        <h3>Сумка поясная</h3>
+                        <p>Два отделения, регулируемый ремень</p>
+                        <div class="product-footer">
+                            <span class="price">3 500 ₽</span>
+                            <button class="add-to-cart" onclick="addToCart('Сумка поясная', 3500)">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">Почему мы</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Ручная работа</h3>
+                    <p>Каждое изделие изготавливается вручную с вниманием к деталям</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🌿</div>
+                    <h3>Натуральная кожа</h3>
+                    <p>Используем только качественную натуральную кожу</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Быстрая доставка</h3>
+                    <p>Отправляем заказы в течение 1-2 дней по всей России</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💎</div>
+                    <h3>Гарантия качества</h3>
+                    <p>Если не понравится — вернём деньги без вопросов</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacts" class="contacts">
+        <div class="container">
+            <h2 class="section-title">Контакты</h2>
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📱</div>
+                    <p>WhatsApp / Telegram</p>
+                    <a href="tel:+79990000000">+7 (999) 000-00-00</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📸</div>
+                    <p>Instagram</p>
+                    <a href="#">@timur.shop</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <p>Город</p>
+                    <span>Москва, Россия</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 TIMUR SHOP. Сделано с искренностью.</p>
+        </div>
+    </footer>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Ваш заказ</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">Итого: <span id="cart-total">0</span> ₽</div>
+            <form onsubmit="sendOrder(event)">
+                <input type="text" id="customer-name" class="input-field" placeholder="Ваше имя" required>
+                <input type="tel" id="customer-phone" class="input-field" placeholder="Телефон (+7...)" required>
+                <button type="submit" class="btn-submit">Отправить в WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

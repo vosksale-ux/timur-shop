@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIMUR.SHOP | Кожаные изделия</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container header-wrap">
+            <div class="logo">TIMUR<span>.SHOP</span></div>
+            <nav class="nav-links">
+                <a href="#catalog">Каталог</a>
+                <a href="delivery.html">Доставка</a>
+                <a href="payment.html">Оплата</a>
+                <a href="reviews.html">Отзывы</a>
+                <a href="about.html">О нас</a>
+            </nav>
+            <a href="cart.html" class="cart-btn">
+                🛒 <span id="cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Вещи с <span class="accent">характером</span></h1>
+            <p>Натуральная кожа. Ручная работа. Честная цена.</p>
+            <a href="#catalog" class="btn">Смотреть каталог</a>
+        </div>
+    </section>
+
+    <section id="catalog" class="catalog">
+        <div class="container">
+            <h2 class="section-title">Каталог изделий</h2>
+            <p class="section-subtitle">Каждая вещь — ручная работа из натуральной кожи</p>
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterProducts('all', this)">Все</button>
+                <button class="filter-btn" onclick="filterProducts('accessories', this)">Аксессуары</button>
+                <button class="filter-btn" onclick="filterProducts('wallets', this)">Кошельки</button>
+                <button class="filter-btn" onclick="filterProducts('belts', this)">Ремни</button>
+                <button class="filter-btn" onclick="filterProducts('covers', this)">Чехлы и обложки</button>
+                <button class="filter-btn" onclick="filterProducts('bags', this)">Сумки</button>
+            </div>
+            <div class="products" id="products-grid"></div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">Почему мы</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Ручная работа</h3>
+                    <p>Каждое изделие изготавливается вручную с вниманием к деталям</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🌿</div>
+                    <h3>Натуральная кожа</h3>
+                    <p>Используем только качественную натуральную кожу</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Быстрая доставка</h3>
+                    <p>Отправляем заказы в течение 1-2 дней по всей России</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💎</div>
+                    <h3>Гарантия качества</h3>
+                    <p>Если не понравится — вернём деньги без вопросов</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacts" class="contacts">
+        <div class="container">
+            <h2 class="section-title">Контакты</h2>
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📱</div>
+                    <p>WhatsApp / Telegram</p>
+                    <a href="tel:+79990000000">+7 (999) 000-00-00</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📸</div>
+                    <p>Instagram</p>
+                    <a href="#">@timur.shop</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <p>Город</p>
+                    <span>Москва, Россия</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 TIMUR SHOP. Сделано с искренностью.</p>
+        </div>
+    </footer>
+
+    <div id="detail-modal" class="modal">
+        <div class="detail-content">
+            <span class="close" onclick="closeDetail()">&times;</span>
+            <div class="detail-body">
+                <div class="detail-gallery">
+                    <div class="detail-main-img" id="detail-main-img"></div>
+                    <div class="detail-thumbs" id="detail-thumbs"></div>
+                </div>
+                <div class="detail-info">
+                    <h2 id="detail-name"></h2>
+                    <div class="detail-price" id="detail-price"></div>
+                    <p class="detail-desc" id="detail-desc"></p>
+                    <button class="btn-detail-cart" id="detail-cart-btn">В корзину</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="zoom-overlay" class="zoom-overlay" onclick="closeZoom()">
+        <img id="zoom-img" src="" alt="">
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

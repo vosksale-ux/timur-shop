@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доставка | TIMUR.SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-body">
+
+    <header>
+        <div class="container header-wrap">
+            <a href="/" class="logo">TIMUR<span>.SHOP</span></a>
+            <nav class="nav-links">
+                <a href="/">Каталог</a>
+                <a href="delivery.html">Доставка</a>
+                <a href="payment.html">Оплата</a>
+                <a href="reviews.html">Отзывы</a>
+                <a href="about.html">О нас</a>
+            </nav>
+            <a href="cart.html" class="cart-btn">
+                🛒 <span id="cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="page-main">
+        <div class="container">
+            <div class="breadcrumbs">
+                <a href="/">Главная</a> <span>/</span> Доставка
+            </div>
+
+            <h1 class="page-title">Доставка</h1>
+            <p class="page-lead">Отправляем заказы по всей России. Упаковываем каждое изделие так, чтобы оно доехало в идеальном состоянии.</p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-icon">📦</div>
+                    <h3>СДЭК</h3>
+                    <div class="info-card-price">от 300 ₽</div>
+                    <p>Доставка до пункта выдачи или курьером. Срок 2-7 дней в зависимости от региона. Трек-номер для отслеживания.</p>
+                    <ul class="info-list">
+                        <li>Страхование отправления</li>
+                        <li>Отслеживание 24/7</li>
+                        <li>Примерка в пункте выдачи</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">✉️</div>
+                    <h3>Почта России</h3>
+                    <div class="info-card-price">от 250 ₽</div>
+                    <p>Надёжная доставка в любой населённый пункт России. Подходит для удалённых регионов.</p>
+                    <ul class="info-list">
+                        <li>Доставка даже в небольшие населённые пункты</li>
+                        <li>Трек-номер для отслеживания</li>
+                        <li>Объявленная ценность</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">🚗</div>
+                    <h3>Курьер по Москве</h3>
+                    <div class="info-card-price">500 ₽</div>
+                    <p>Доставим заказ лично в руки в удобное для вас время. Возможна примерка при получении.</p>
+                    <ul class="info-list">
+                        <li>Доставка 1-2 дня</li>
+                        <li>Удобный интервал времени</li>
+                        <li>Примерка при получении</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-section-title">Как мы упаковываем</h2>
+                <div class="packaging-steps">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-text">
+                            <h4>Картонная коробка</h4>
+                            <p>Каждое изделие помещается в плотную картонную коробку подходящего размера</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-text">
+                            <h4>Мягкая упаковка</h4>
+                            <p>Изделие оборачивается в мягкую бумагу и пузырчатую плёнку для защиты от повреждений</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-text">
+                            <h4>Подарочный пакет</h4>
+                            <p>По желанию добавим подарочную упаковку с открыткой — бесплатно</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-text">
+                            <h4>Отправка</h4>
+                            <p>Отправляем заказ в течение 1-2 рабочих дней после подтверждения. Присылаем трек-номер</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 TIMUR SHOP. Сделано с искренностью.</p>
+        </div>
+    </footer>
+
+    <script>
+        var saved = localStorage.getItem('timur_cart');
+        var cart = saved ? JSON.parse(saved) : [];
+        document.getElementById('cart-count').textContent = cart.reduce(function(s,i){ return s+i.qty; }, 0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата | TIMUR.SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-body">
+
+    <header>
+        <div class="container header-wrap">
+            <a href="/" class="logo">TIMUR<span>.SHOP</span></a>
+            <nav class="nav-links">
+                <a href="/">Каталог</a>
+                <a href="delivery.html">Доставка</a>
+                <a href="payment.html">Оплата</a>
+                <a href="reviews.html">Отзывы</a>
+                <a href="about.html">О нас</a>
+            </nav>
+            <a href="cart.html" class="cart-btn">
+                🛒 <span id="cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="page-main">
+        <div class="container">
+            <div class="breadcrumbs">
+                <a href="/">Главная</a> <span>/</span> Оплата
+            </div>
+
+            <h1 class="page-title">Оплата</h1>
+            <p class="page-lead">Выбирайте удобный способ оплаты. Мы гарантируем безопасность каждой сделки.</p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-icon">💳</div>
+                    <h3>Перевод на карту</h3>
+                    <div class="info-card-badge">Быстро</div>
+                    <p>Перевод на карту Сбербанк или Тинькофф. Подтверждение оплаты — скриншот или чек.</p>
+                    <ul class="info-list">
+                        <li>Моментальное зачисление</li>
+                        <li>Без комиссии</li>
+                        <li>Подтверждение по скриншоту</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">📱</div>
+                    <h3>СБП (Система быстрых платежей)</h3>
+                    <div class="info-card-badge">Удобно</div>
+                    <p>Перевод по номеру телефона через приложение любого банка.</p>
+                    <ul class="info-list">
+                        <li>Перевод за 10 секунд</li>
+                        <li>Без комиссии до 100 000 ₽/мес</li>
+                        <li>Работает с любым банком</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">📦</div>
+                    <h3>Наложенный платёж</h3>
+                    <div class="info-card-badge">Надёжно</div>
+                    <p>Оплачиваете при получении в пункте выдачи СДЭК или на почте. Небольшая наценка за страховку.</p>
+                    <ul class="info-list">
+                        <li>Оплата при получении</li>
+                        <li>Возможна примерка</li>
+                        <li>Наценка 3-5% за страховку</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-section-title">Как оформить заказ</h2>
+                <div class="packaging-steps">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-text">
+                            <h4>Выберите товары</h4>
+                            <p>Добавьте понравившиеся изделия в корзину на сайте</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-text">
+                            <h4>Заполните данные</h4>
+                            <p>Укажите имя, телефон, адрес доставки и способ оплаты</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-text">
+                            <h4>Отправьте заявку</h4>
+                            <p>Нажмите кнопку «Отправить в WhatsApp» или «Отправить в Telegram»</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-text">
+                            <h4>Подтверждение</h4>
+                            <p>Мы свяжемся с вами, подтвердим заказ, расскажем как оплатить и отправим в течение 1-2 дней</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-section-title">Возврат и обмен</h2>
+                <div class="returns-grid">
+                    <div class="return-item">
+                        <h4>14 дней на возврат</h4>
+                        <p>Если изделие не подошло — вернём деньги в течение 14 дней с момента получения</p>
+                    </div>
+                    <div class="return-item">
+                        <h4>Гарантия качества</h4>
+                        <p>Если обнаружите брак — заменим изделие бесплатно или вернём деньги</p>
+                    </div>
+                    <div class="return-item">
+                        <h4>Простой процесс</h4>
+                        <p>Напишите нам в WhatsApp или Telegram — расскажем, как оформить возврат</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 TIMUR SHOP. Сделано с искренностью.</p>
+        </div>
+    </footer>
+
+    <script>
+        var saved = localStorage.getItem('timur_cart');
+        var cart = saved ? JSON.parse(saved) : [];
+        document.getElementById('cart-count').textContent = cart.reduce(function(s,i){ return s+i.qty; }, 0);
+    </script>
+</body>
+</html>
