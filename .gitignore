@@ -1,5 +1,8 @@
 node_modules/
 public/uploads/
+uploads/
 data/products.json
 *.log
 .DS_Store
+nul
+timur-shop-backup-*/

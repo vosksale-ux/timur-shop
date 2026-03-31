@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /uploads/
+Disallow: /data/
+Disallow: /server.js
+
+Sitemap: https://timur.shop/sitemap.xml

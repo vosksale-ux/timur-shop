@@ -6,6 +6,7 @@
     <title>Отзывы | TIMUR.SHOP</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>
 </head>
 <body class="page-body">
 
@@ -188,8 +189,17 @@
     </footer>
 
     <div id="toast" class="toast"></div>
+    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()" title="Наверх">↑</button>
 
     <script>
+        function scrollToTop() {
+            if (typeof window.__lenis !== 'undefined') {
+                window.__lenis.scrollTo(0, { duration: 1.5 });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
         function toggleMenu() {
             document.getElementById('burger').classList.toggle('active');
             document.getElementById('nav-links').classList.toggle('open');
@@ -243,6 +253,29 @@
             toast.classList.add('show');
             setTimeout(function () { toast.classList.remove('show'); }, 2500);
         }
+
+        (function initLenis() {
+            if (typeof Lenis === 'undefined') return;
+            window.__lenis = new Lenis({
+                lerp: 0.1,
+                smoothWheel: true,
+                wheelMultiplier: 1,
+                touchMultiplier: 2
+            });
+            function raf(time) {
+                window.__lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+        })();
+
+        (function initScrollTop() {
+            var btn = document.getElementById('scrollTopBtn');
+            if (!btn) return;
+            window.addEventListener('scroll', function () {
+                btn.classList.toggle('visible', window.scrollY > 500);
+            });
+        })();
     </script>
 </body>
 </html>

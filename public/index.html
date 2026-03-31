@@ -3,16 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIMUR.SHOP | Кожаные изделия</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>TIMUR.SHOP | Кожаные изделия ручной работы</title>
+    <meta name="description" content="Натуральная кожа, ручная работа, честная цена. Кошельки, ремни, сумки, аксессуары с доставкой по России.">
+    <meta property="og:title" content="TIMUR.SHOP — Кожаные изделия ручной работы">
+    <meta property="og:description" content="Натуральная кожа, ручная работа, честная цена. Доставка по всей России.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://timur.shop">
+    <meta property="og:image" content="/uploads/og-image.jpg">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
         <div class="container header-wrap">
-            <div class="logo">TIMUR<span>.SHOP</span></div>
-            <nav class="nav-links">
+            <a href="/" class="logo">TIMUR<span>.SHOP</span></a>
+            <button class="burger" id="burger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </button>
+            <nav class="nav-links" id="nav-links">
                 <a href="#catalog">Каталог</a>
                 <a href="delivery.html">Доставка</a>
                 <a href="payment.html">Оплата</a>
@@ -26,17 +39,76 @@
     </header>
 
     <section class="hero">
-        <div class="container">
+        <div class="hero-bg-lines"></div>
+        <div class="container hero-content">
+            <div class="hero-badge">Ручная работа из натуральной кожи</div>
             <h1>Вещи с <span class="accent">характером</span></h1>
-            <p>Натуральная кожа. Ручная работа. Честная цена.</p>
-            <a href="#catalog" class="btn">Смотреть каталог</a>
+            <p class="hero-subtitle">Каждое изделие создаётся вручную с вниманием к каждому стежку. Кожа, которая стареет красиво.</p>
+            <div class="hero-actions">
+                <a href="#catalog" class="btn">Смотреть каталог</a>
+                <a href="https://wa.me/79990000000?text=Здравствуйте!%20Хочу%20узнать%20о%20товарах" class="btn btn-outline" target="_blank">Написать нам</a>
+            </div>
+            <div class="hero-trust">
+                <div class="hero-trust-item">
+                    <strong>500+</strong>
+                    <span>довольных клиентов</span>
+                </div>
+                <div class="hero-trust-divider"></div>
+                <div class="hero-trust-item">
+                    <strong>100%</strong>
+                    <span>натуральная кожа</span>
+                </div>
+                <div class="hero-trust-divider"></div>
+                <div class="hero-trust-item">
+                    <strong>1-2 дня</strong>
+                    <span>отправка заказа</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <a href="#categories">Листайте вниз</a>
+            <span class="hero-scroll-arrow">↓</span>
+        </div>
+    </section>
+
+    <section id="categories" class="categories-section">
+        <div class="container">
+            <h2 class="section-title fade-up">Категории</h2>
+            <p class="section-subtitle fade-up">Выберите то, что вам нужно</p>
+            <div class="categories-grid">
+                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('wallets', document.querySelector('.filter-btn:nth-child(3)'))}, 300)">
+                    <div class="category-icon">👛</div>
+                    <h3>Кошельки</h3>
+                    <span class="category-count" id="cat-wallets">0 товаров</span>
+                </a>
+                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('belts', document.querySelector('.filter-btn:nth-child(4)'))}, 300)">
+                    <div class="category-icon">👔</div>
+                    <h3>Ремни</h3>
+                    <span class="category-count" id="cat-belts">0 товаров</span>
+                </a>
+                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('bags', document.querySelector('.filter-btn:nth-child(6)'))}, 300)">
+                    <div class="category-icon">👜</div>
+                    <h3>Сумки</h3>
+                    <span class="category-count" id="cat-bags">0 товаров</span>
+                </a>
+                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('covers', document.querySelector('.filter-btn:nth-child(5)'))}, 300)">
+                    <div class="category-icon">📖</div>
+                    <h3>Чехлы и обложки</h3>
+                    <span class="category-count" id="cat-covers">0 товаров</span>
+                </a>
+                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('accessories', document.querySelector('.filter-btn:nth-child(2)'))}, 300)">
+                    <div class="category-icon">✨</div>
+                    <h3>Аксессуары</h3>
+                    <span class="category-count" id="cat-accessories">0 товаров</span>
+                </a>
+            </div>
         </div>
     </section>
 
     <section id="catalog" class="catalog">
         <div class="container">
-            <h2 class="section-title">Каталог изделий</h2>
-            <p class="section-subtitle">Каждая вещь — ручная работа из натуральной кожи</p>
+            <h2 class="section-title fade-up">Каталог изделий</h2>
+            <p class="section-subtitle fade-up">Каждая вещь — ручная работа из натуральной кожи</p>
             <div class="filters">
                 <button class="filter-btn active" onclick="filterProducts('all', this)">Все</button>
                 <button class="filter-btn" onclick="filterProducts('accessories', this)">Аксессуары</button>
@@ -49,60 +121,170 @@
         </div>
     </section>
 
-    <section id="about" class="about">
+    <section class="advantages">
         <div class="container">
-            <h2 class="section-title">Почему мы</h2>
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🤝</div>
-                    <h3>Ручная работа</h3>
-                    <p>Каждое изделие изготавливается вручную с вниманием к деталям</p>
+            <h2 class="section-title fade-up">Почему выбирают нас</h2>
+            <p class="section-subtitle fade-up">Больше, чем просто магазин кожаных изделий</p>
+            <div class="advantages-grid">
+                <div class="advantage-card fade-up">
+                    <div class="advantage-num" data-target="500">0</div>
+                    <div class="advantage-label">довольных клиентов</div>
+                    <div class="advantage-desc">Люди возвращаются к нам снова и снова за качеством, которое чувствуешь руками</div>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">🌿</div>
-                    <h3>Натуральная кожа</h3>
-                    <p>Используем только качественную натуральную кожу</p>
+                <div class="advantage-card fade-up">
+                    <div class="advantage-icon-big">🌿</div>
+                    <div class="advantage-label">Натуральная кожа</div>
+                    <div class="advantage-desc">Используем только проверенную итальянскую и российскую кожу премиум-класса</div>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">🚚</div>
-                    <h3>Быстрая доставка</h3>
-                    <p>Отправляем заказы в течение 1-2 дней по всей России</p>
+                <div class="advantage-card fade-up">
+                    <div class="advantage-icon-big">🤝</div>
+                    <div class="advantage-label">Ручная работа</div>
+                    <div class="advantage-desc">Каждый стежок — ручной. Никаких конвейеров, только мастерство и любовь к делу</div>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">💎</div>
-                    <h3>Гарантия качества</h3>
-                    <p>Если не понравится — вернём деньги без вопросов</p>
+                <div class="advantage-card fade-up">
+                    <div class="advantage-icon-big">💎</div>
+                    <div class="advantage-label">Гарантия качества</div>
+                    <div class="advantage-desc">Если изделие не оправдает ожиданий — вернём деньги без лишних вопросов</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contacts" class="contacts">
+    <section class="howto-section">
         <div class="container">
-            <h2 class="section-title">Контакты</h2>
-            <div class="contacts-grid">
-                <div class="contact-card">
-                    <div class="contact-icon">📱</div>
-                    <p>WhatsApp / Telegram</p>
-                    <a href="tel:+79990000000">+7 (999) 000-00-00</a>
+            <h2 class="section-title fade-up">Как заказать</h2>
+            <p class="section-subtitle fade-up">Три простых шага до изделия вашей мечты</p>
+            <div class="howto-steps">
+                <div class="howto-step fade-up">
+                    <div class="howto-num">1</div>
+                    <div class="howto-text">
+                        <h4>Выберите товар</h4>
+                        <p>Просмотрите каталог и добавьте понравившиеся изделия в корзину</p>
+                    </div>
                 </div>
-                <div class="contact-card">
-                    <div class="contact-icon">📸</div>
-                    <p>Instagram</p>
+                <div class="howto-connector"></div>
+                <div class="howto-step fade-up">
+                    <div class="howto-num">2</div>
+                    <div class="howto-text">
+                        <h4>Оформите заказ</h4>
+                        <p>Заполните данные и выберите удобный способ доставки</p>
+                    </div>
+                </div>
+                <div class="howto-connector"></div>
+                <div class="howto-step fade-up">
+                    <div class="howto-num">3</div>
+                    <div class="howto-text">
+                        <h4>Получите изделие</h4>
+                        <p>Отправим в течение 1-2 дней. Доставим СДЭК, Почтой или курьером</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reviews-preview">
+        <div class="container">
+            <h2 class="section-title fade-up">Отзывы клиентов</h2>
+            <p class="section-subtitle fade-up">Что говорят о нас те, кто уже получил свой заказ</p>
+            <div class="swiper reviews-swiper fade-up">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="review-prev-card">
+                            <div class="review-prev-stars">★★★★★</div>
+                            <p class="review-prev-text">"Заказывал портмоне — качество просто невероятное! Кожа мягкая, швы ровные, запах настоящий. Уже заказываю второй раз — жене на подарок."</p>
+                            <div class="review-prev-author">
+                                <div class="review-prev-avatar">АК</div>
+                                <div>
+                                    <div class="review-prev-name">Алексей К.</div>
+                                    <div class="review-prev-product">Портмоне</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="review-prev-card">
+                            <div class="review-prev-stars">★★★★★</div>
+                            <p class="review-prev-text">"Брала обложку на паспорт — теперь каждый раз улыбаюсь, когда достаю. Кожа пахнет просто волшебно! Доставка быстрая, упаковка как подарок."</p>
+                            <div class="review-prev-author">
+                                <div class="review-prev-avatar">МВ</div>
+                                <div>
+                                    <div class="review-prev-name">Мария В.</div>
+                                    <div class="review-prev-product">Обложка на паспорт</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="review-prev-card">
+                            <div class="review-prev-stars">★★★★★</div>
+                            <p class="review-prev-text">"Ремень ношу уже полгода — выглядит только лучше со временем. Настоящая кожа, которая красиво стареет. Рекомендую всем!"</p>
+                            <div class="review-prev-author">
+                                <div class="review-prev-avatar">ДС</div>
+                                <div>
+                                    <div class="review-prev-name">Дмитрий С.</div>
+                                    <div class="review-prev-product">Ремень классический</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <div class="reviews-prev-footer">
+                <a href="reviews.html" class="btn btn-outline">Все отзывы →</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card fade-scale">
+                <div class="cta-content">
+                    <h2>Не нашли то, что искали?</h2>
+                    <p>Изготовим изделие на заказ по вашим размерам и пожеланиям. Напишите нам — обсудим!</p>
+                    <div class="cta-buttons">
+                        <a href="https://wa.me/79990000000?text=Здравствуйте!%20Хочу%20заказать%20изделие%20на%20заказ" class="btn" target="_blank">Написать в WhatsApp</a>
+                        <a href="https://t.me/timur_shop?text=Здравствуйте!%20Хочу%20заказать%20изделие%20на%20заказ" class="btn btn-outline" target="_blank">Написать в Telegram</a>
+                    </div>
+                </div>
+                <div class="cta-decoration">✂️</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo">TIMUR<span>.SHOP</span></div>
+                    <p class="footer-about">Кожаные изделия ручной работы. Натуральные материалы, честная цена, доставка по всей России.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Каталог</h4>
+                    <a href="#catalog" onclick="setTimeout(function(){filterProducts('wallets', document.querySelector('.filter-btn:nth-child(3)'))}, 300)">Кошельки</a>
+                    <a href="#catalog" onclick="setTimeout(function(){filterProducts('belts', document.querySelector('.filter-btn:nth-child(4)'))}, 300)">Ремни</a>
+                    <a href="#catalog" onclick="setTimeout(function(){filterProducts('bags', document.querySelector('.filter-btn:nth-child(6)'))}, 300)">Сумки</a>
+                    <a href="#catalog" onclick="setTimeout(function(){filterProducts('covers', document.querySelector('.filter-btn:nth-child(5)'))}, 300)">Чехлы</a>
+                    <a href="#catalog" onclick="setTimeout(function(){filterProducts('accessories', document.querySelector('.filter-btn:nth-child(2)'))}, 300)">Аксессуары</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <a href="delivery.html">Доставка</a>
+                    <a href="payment.html">Оплата</a>
+                    <a href="about.html">О нас</a>
+                    <a href="reviews.html">Отзывы</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <a href="tel:+79990000000">+7 (999) 000-00-00</a>
+                    <a href="https://wa.me/79990000000" target="_blank">WhatsApp</a>
+                    <a href="https://t.me/timur_shop" target="_blank">Telegram</a>
                     <a href="#">@timur.shop</a>
                 </div>
-                <div class="contact-card">
-                    <div class="contact-icon">📍</div>
-                    <p>Город</p>
-                    <span>Москва, Россия</span>
-                </div>
             </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 TIMUR SHOP. Сделано с искренностью.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TIMUR SHOP. Сделано с искренностью.</p>
+            </div>
         </div>
     </footer>
 
@@ -111,8 +293,7 @@
             <span class="close" onclick="closeDetail()">&times;</span>
             <div class="detail-body">
                 <div class="detail-gallery">
-                    <div class="detail-main-img" id="detail-main-img"></div>
-                    <div class="detail-thumbs" id="detail-thumbs"></div>
+                    <div class="detail-carousel-wrap" id="detail-carousel"></div>
                 </div>
                 <div class="detail-info">
                     <h2 id="detail-name"></h2>
@@ -124,12 +305,21 @@
         </div>
     </div>
 
-    <div id="zoom-overlay" class="zoom-overlay" onclick="closeZoom()">
-        <img id="zoom-img" src="" alt="">
+    <div id="zoom-overlay" class="zoom-overlay">
+        <div id="zoom-carousel" class="zoom-carousel"></div>
+        <button class="zoom-arrow zoom-prev" onclick="zoomSlide(-1)">‹</button>
+        <button class="zoom-arrow zoom-next" onclick="zoomSlide(1)">›</button>
+        <div id="zoom-dots" class="zoom-dots"></div>
+        <span id="zoom-hint" class="zoom-hint">Колёсико — увеличение · Двойной клик — 2.5x · Перетаскивание — перемещение</span>
+        <button class="zoom-close-btn" onclick="closeZoom()">&times;</button>
     </div>
 
     <div id="toast" class="toast"></div>
 
+    <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
+
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
