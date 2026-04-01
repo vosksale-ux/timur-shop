@@ -272,11 +272,11 @@
                         var ytMatch = v.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
                         var isFile = v.url.match(/\.(mp4|webm)(\?|$)/i);
                         if (ytMatch) {
-                            card.innerHTML = '<img src="https://img.youtube.com/vi/' + ytMatch[1] + '/mqdefault.jpg" alt=""><span class="video-gallery-play">\u25B6</span>';
+                            card.innerHTML = '<img src="https://img.youtube.com/vi/' + ytMatch[1] + '/mqdefault.jpg" alt=""><span class="video-gallery-play">&#9654;</span>';
                         } else if (isFile) {
-                            card.innerHTML = '<div class="video-gallery-thumb-file">\uD83C\uDFC\uDE1</div><span class="video-gallery-play">\u25B6</span>';
+                            card.innerHTML = '<div class="video-gallery-thumb-file">&#127916;</div><span class="video-gallery-play">&#9654;</span>';
                         } else {
-                            card.innerHTML = '<div class="video-gallery-thumb-url">\uD83D\uDD17</div><span class="video-gallery-play">\u25B6</span>';
+                            card.innerHTML = '<div class="video-gallery-thumb-url">&#128279;</div><span class="video-gallery-play">&#9654;</span>';
                         }
                         var label = document.createElement('div');
                         label.className = 'video-gallery-label';
