@@ -4,15 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Доставка | TIMUR.SHOP</title>
+    <meta name="description" content="Доставка кожаных изделий TIMUR.SHOP по всей России. СДЭК, Почта России, курьер по Москве.">
+    <meta property="og:title" content="Доставка | TIMUR.SHOP">
+    <meta property="og:description" content="Доставка кожаных изделий по всей России. СДЭК, Почта России, курьер по Москве. Отправка за 1-2 дня.">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://timur.shop/delivery.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Доставка | TIMUR.SHOP">
+    <meta name="twitter:description" content="Доставка кожаных изделий по всей России. СДЭК, Почта России, курьер по Москве. Отправка за 1-2 дня.">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Сколько стоит доставка?", "acceptedAnswer": {"@type": "Answer", "text": "СДЭК — от 300 ₽, Почта России — от 250 ₽, курьер по Москве — 500 ₽. Точная стоимость рассчитывается при оформлении заказа."}},
+    {"@type": "Question", "name": "Как быстро придёт заказ?", "acceptedAnswer": {"@type": "Answer", "text": "Отправляем в течение 1-2 рабочих дней. СДЭК доставляет за 2-7 дней, Почта России — за 5-14 дней, курьер по Москве — 1-2 дня."}},
+    {"@type": "Question", "name": "Можно ли примерить перед покупкой?", "acceptedAnswer": {"@type": "Answer", "text": "Да, в пунктах выдачи СДЭК и при курьерской доставке по Москве возможна примерка."}},
+    {"@type": "Question", "name": "Будет ли трек-номер?", "acceptedAnswer": {"@type": "Answer", "text": "Да, после отправки пришлём трек-номер в WhatsApp или Telegram."}},
+    {"@type": "Question", "name": "Отправляете ли вы за рубеж?", "acceptedAnswer": {"@type": "Answer", "text": "Сейчас отправляем только по России."}}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Главная", "item": "https://timur.shop/"},
+    {"@type": "ListItem", "position": 2, "name": "Доставка"}
+  ]
+}
+</script>
 </head>
 <body class="page-body">
+    <a href="#main-content" class="skip-link">Перейти к содержимому</a>
 
     <header>
         <div class="container header-wrap">
             <a href="/" class="logo">TIMUR<span>.SHOP</span></a>
-            <button class="burger" id="burger" onclick="toggleMenu()">
+            <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Открыть меню">
                 <span></span><span></span><span></span>
             </button>
             <nav class="nav-links" id="nav-links">
@@ -22,13 +54,13 @@
                 <a href="reviews.html">Отзывы</a>
                 <a href="about.html">О нас</a>
             </nav>
-            <a href="cart.html" class="cart-btn">
+            <a href="cart.html" class="cart-btn" aria-label="Корзина">
                 🛒 <span id="cart-count">0</span>
             </a>
         </div>
     </header>
 
-    <main class="page-main">
+    <main class="page-main" id="main-content">
         <div class="container">
             <div class="breadcrumbs">
                 <a href="/">Главная</a> <span>/</span> Доставка
@@ -149,12 +181,18 @@
 
     <footer>
         <div class="container">
+            <div class="footer-legal">
+                <a href="privacy.html">Политика конфиденциальности</a>
+                <a href="terms.html">Условия использования</a>
+                <a href="returns.html">Возврат и обмен</a>
+                <a href="offerta.html">Публичная оферта</a>
+            </div>
             <p>&copy; 2024–2026 TIMUR SHOP. Сделано с искренностью.</p>
         </div>
     </footer>
 
     <div id="toast" class="toast"></div>
-    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()" title="Наверх">↑</button>
+    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()" title="Наверх" aria-label="Наверх">↑</button>
 
     <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
     <script>

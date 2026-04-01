@@ -11,18 +11,46 @@
     <meta property="og:url" content="https://timur.shop">
     <meta property="og:image" content="/uploads/og-image.jpg">
     <meta property="og:locale" content="ru_RU">
+    <link rel="canonical" href="https://timur.shop/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TIMUR.SHOP — Кожаные изделия ручной работы">
+    <meta name="twitter:description" content="Натуральная кожа, ручная работа, честная цена. Доставка по всей России.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "TIMUR.SHOP",
+  "url": "https://timur.shop",
+  "description": "Мастерская кожаных изделий ручной работы. Натуральная кожа, честная цена, доставка по России.",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+7-999-000-00-00",
+    "contactType": "customer service",
+    "availableLanguage": "Russian"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "TIMUR.SHOP",
+  "url": "https://timur.shop"
+}
+</script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Перейти к содержимому</a>
 
     <header>
         <div class="container header-wrap">
             <a href="/" class="logo">TIMUR<span>.SHOP</span></a>
-            <button class="burger" id="burger" onclick="toggleMenu()">
+            <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Открыть меню">
                 <span></span><span></span><span></span>
             </button>
             <nav class="nav-links" id="nav-links">
@@ -32,12 +60,13 @@
                 <a href="reviews.html">Отзывы</a>
                 <a href="about.html">О нас</a>
             </nav>
-            <a href="cart.html" class="cart-btn">
+            <a href="cart.html" class="cart-btn" aria-label="Корзина">
                 🛒 <span id="cart-count">0</span>
             </a>
         </div>
     </header>
 
+    <main id="main-content">
     <section class="hero">
         <div class="hero-bg-lines"></div>
         <div class="container hero-content">
@@ -251,6 +280,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <footer class="main-footer">
         <div class="container">
@@ -284,13 +314,19 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2024–2026 TIMUR SHOP. Сделано с искренностью.</p>
+                <div class="footer-legal">
+                    <a href="privacy.html">Политика конфиденциальности</a>
+                    <a href="terms.html">Условия использования</a>
+                    <a href="returns.html">Возврат и обмен</a>
+                    <a href="offerta.html">Публичная оферта</a>
+                </div>
             </div>
         </div>
     </footer>
 
     <div id="detail-modal" class="modal" data-lenis-prevent>
         <div class="detail-content">
-            <span class="close" onclick="closeDetail()">&times;</span>
+            <span class="close" onclick="closeDetail()" aria-label="Закрыть">&times;</span>
             <div class="detail-body">
                 <div class="detail-gallery">
                     <div class="detail-carousel-wrap" id="detail-carousel"></div>
@@ -314,7 +350,7 @@
         <button class="zoom-arrow zoom-next" onclick="zoomSlide(1)">›</button>
         <div id="zoom-dots" class="zoom-dots"></div>
         <span id="zoom-hint" class="zoom-hint">Колёсико — увеличение · Двойной клик — 2.5x · Перетаскивание — перемещение</span>
-        <button class="zoom-close-btn" onclick="closeZoom()">&times;</button>
+        <button class="zoom-close-btn" onclick="closeZoom()" aria-label="Закрыть">&times;</button>
     </div>
 
     <div id="toast" class="toast"></div>
@@ -323,7 +359,7 @@
         🛒 <span id="cart-fab-count" class="cart-fab-count">0</span>
     </a>
 
-    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()" title="Наверх">↑</button>
+    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()" title="Наверх" aria-label="Наверх">↑</button>
 
     <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
