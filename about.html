@@ -147,7 +147,7 @@
                 <div class="video-gallery" id="video-gallery"></div>
             </div>
 
-            <div class="video-modal" id="video-modal" onclick="closeVideoModal(event)">
+            <div class="video-modal" id="video-modal" onclick="closeVideoModal(event)" data-lenis-prevent>
                 <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Закрыть">&times;</button>
                 <h3 id="video-modal-title" style="color:#fff;text-align:center;margin-bottom:1rem;font-size:1.1rem"></h3>
                 <div class="video-modal-body" id="video-modal-body" style="max-width:640px;width:90%"></div>
@@ -274,7 +274,7 @@
                         if (ytMatch) {
                             card.innerHTML = '<img src="https://img.youtube.com/vi/' + ytMatch[1] + '/mqdefault.jpg" alt=""><span class="video-gallery-play">&#9654;</span>';
                         } else if (isFile) {
-                            card.innerHTML = '<div class="video-gallery-thumb-file">&#127916;</div><span class="video-gallery-play">&#9654;</span>';
+                            card.innerHTML = '<video src="' + v.url + '" muted preload="metadata" class="video-gallery-thumb-vid"></video><span class="video-gallery-play">&#9654;</span>';
                         } else {
                             card.innerHTML = '<div class="video-gallery-thumb-url">&#128279;</div><span class="video-gallery-play">&#9654;</span>';
                         }
@@ -290,15 +290,29 @@
         function openVideoModal(video) {
             var modal = document.getElementById('video-modal');
             var body = document.getElementById('video-modal-body');
+            var title = document.getElementById('video-modal-title');
+            title.textContent = video.title;
             var ytMatch = video.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
             var vmMatch = video.url.match(/vimeo\.com\/(\d+)/);
             if (ytMatch) {
-                body.innerHTML = '<div style="max-width:640px;width:100%"><div style="position:relative;padding-bottom:56.25%"><iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px"></iframe></div></div>';
+                body.innerHTML = '<div style="max-width:640px;width:100%;margin:0 auto"><div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden"><iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px"></iframe></div></div>';
             } else if (vmMatch) {
-                body.innerHTML = '<div style="max-width:640px;width:100%"><div style="position:relative;padding-bottom:56.25%"><iframe src="https://player.vimeo.com/video/' + vmMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px"></iframe></div></div>';
+                body.innerHTML = '<div style="max-width:640px;width:100%;margin:0 auto"><div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden"><iframe src="https://player.vimeo.com/video/' + vmMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px"></iframe></div></div>';
             } else {
-                body.innerHTML = '<video src="' + video.url + '" controls playsinline autoplay style="width:100%;max-width:640px;border-radius:8px;display:block"></video>';
+                body.innerHTML = '<video src="' + video.url + '" controls playsinline autoplay style="width:100%;max-width:640px;border-radius:12px;display:block"></video>';
             }
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal(e) {
+            if (e && e.target !== document.getElementById('video-modal') && !e.target.classList.contains('video-modal-close')) return;
+            var modal = document.getElementById('video-modal');
+            var body = document.getElementById('video-modal-body');
+            modal.classList.remove('open');
+            body.innerHTML = '';
+            document.body.style.overflow = '';
+        }
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
         }
