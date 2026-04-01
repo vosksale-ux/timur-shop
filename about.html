@@ -10,7 +10,6 @@
     <meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>
 </head>
 <body class="page-body">
 
@@ -131,7 +130,7 @@
             <div class="info-section fade-up">
                 <h2 class="info-section-title">Видео из мастерской</h2>
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Процесс создания изделий" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <div style="width:100%;aspect-ratio:16/9;background:#1a1714;display:flex;align-items:center;justify-content:center;border-radius:12px;color:#8a8279;font-size:1.1rem;">Видео скоро появится</div>
                 </div>
             </div>
 
@@ -160,17 +159,18 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 TIMUR SHOP. Сделано с искренностью.</p>
+            <p>&copy; 2024–2026 TIMUR SHOP. Сделано с искренностью.</p>
         </div>
     </footer>
 
     <div id="toast" class="toast"></div>
     <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()" title="Наверх">↑</button>
 
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
     <script>
         function scrollToTop() {
-            if (typeof window.__lenis !== 'undefined') {
-                window.__lenis.scrollTo(0, { duration: 1.5 });
+            if (window.lenisInstance) {
+                window.lenisInstance.scrollTo(0, { duration: 1.5 });
             } else {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
@@ -188,35 +188,16 @@
             });
         });
 
-        function toggleFaq(btn) {
-            var item = btn.parentElement;
-            var answer = item.querySelector('.faq-answer');
-            var icon = btn.querySelector('.faq-icon');
-            var isOpen = item.classList.contains('open');
-
-            document.querySelectorAll('.faq-item.open').forEach(function(openItem) {
-                openItem.classList.remove('open');
-                openItem.querySelector('.faq-answer').style.maxHeight = '0';
-                openItem.querySelector('.faq-icon').textContent = '+';
-            });
-
-            if (!isOpen) {
-                item.classList.add('open');
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-                icon.textContent = '−';
-            }
-        }
-
         (function initLenis() {
             if (typeof Lenis === 'undefined') return;
-            window.__lenis = new Lenis({
+            window.lenisInstance = new Lenis({
                 lerp: 0.1,
                 smoothWheel: true,
                 wheelMultiplier: 1,
                 touchMultiplier: 2
             });
             function raf(time) {
-                window.__lenis.raf(time);
+                window.lenisInstance.raf(time);
                 requestAnimationFrame(raf);
             }
             requestAnimationFrame(raf);

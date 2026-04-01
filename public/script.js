@@ -24,11 +24,17 @@ window.onload = function () {
 
 function loadProducts() {
     fetch('/api/products')
-        .then(function (res) { return res.json(); })
+        .then(function (res) {
+            if (!res.ok) throw new Error('Ошибка загрузки товаров');
+            return res.json();
+        })
         .then(function (products) {
             allProducts = products;
             renderProducts(products);
             updateCategoryCounts(products);
+        })
+        .catch(function (err) {
+            showToast('Ошибка загрузки каталога');
         });
 }
 
@@ -121,7 +127,10 @@ var zoomIndex = 0;
 
 function openDetail(id) {
     fetch('/api/products/' + id)
-        .then(function (res) { return res.json(); })
+        .then(function (res) {
+            if (!res.ok) throw new Error('Товар не найден');
+            return res.json();
+        })
         .then(function (p) {
             document.getElementById('detail-name').textContent = p.name;
             document.getElementById('detail-price').textContent = p.price.toLocaleString('ru-RU') + ' ₽';
@@ -165,6 +174,9 @@ function openDetail(id) {
 
             document.getElementById('detail-modal').style.display = 'block';
             document.body.style.overflow = 'hidden';
+        })
+        .catch(function (err) {
+            showToast('Ошибка загрузки товара');
         });
 }
 
@@ -420,18 +432,41 @@ window.onclick = function (event) {
     animateNums();
 })();
 
+function scrollToTop() {
+    if (typeof lenisInstance !== 'undefined' && lenisInstance) {
+        lenisInstance.scrollTo(0, { duration: 1.5 });
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+var lenisInstance = null;
 (function initLenis() {
     if (typeof Lenis === 'undefined') return;
-    var lenis = new Lenis({
-        duration: 1.2,
-        easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
-        smoothWheel: true
+    lenisInstance = new Lenis({
+        lerp: 0.1,
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+        infinite: false
     });
     function raf(time) {
-        lenis.raf(time);
+        lenisInstance.raf(time);
         requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
+})();
+
+(function initScrollTop() {
+    var btn = document.getElementById('scrollTopBtn');
+    if (!btn) return;
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 500) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    });
 })();
 
 (function initReviewsSwiper() {
@@ -468,18 +503,6 @@ window.onclick = function (event) {
         card.addEventListener('mouseleave', function () {
             card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
         });
-    });
-})();
-
-(function initScrollTop() {
-    var btn = document.getElementById('scrollTopBtn');
-    if (!btn) return;
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > 500) {
-            btn.classList.add('visible');
-        } else {
-            btn.classList.remove('visible');
-        }
     });
 })();
 

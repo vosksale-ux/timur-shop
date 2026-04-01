@@ -356,12 +356,6 @@ header {
     transform: translateY(-2px);
     box-shadow: 0 6px 25px rgba(200,132,60,0.25);
 }
-.btn-outline {
-    background: transparent; color: var(--accent2); border: 2px solid var(--accent);
-}
-.btn-outline:hover {
-    background: var(--accent); color: var(--bg);
-}
 
 .catalog { padding: 5rem 0; }
 .section-title {
@@ -440,7 +434,6 @@ header {
 .carousel-dot.active { background: var(--accent); transform: scale(1.2); }
 .product-info { padding: 1.5rem; }
 .product h3 { font-size: 1.05rem; margin-bottom: 0.4rem; font-weight: 700; letter-spacing: 0.5px; }
-.product p { color: var(--text2); font-size: 0.82rem; margin-bottom: 1.2rem; }
 .product-footer { display: flex; justify-content: space-between; align-items: center; }
 .price { font-size: 1.25rem; font-weight: 800; color: var(--accent2); letter-spacing: 0.5px; }
 .add-to-cart {
@@ -450,6 +443,28 @@ header {
     letter-spacing: 0.5px; text-transform: uppercase;
 }
 .add-to-cart:hover { background: var(--accent2); }
+
+.product-desc { color: var(--text2); font-size: 0.82rem; margin-bottom: 1.2rem; line-height: 1.5; }
+.product-desc > p { color: var(--text2); font-size: 0.82rem; margin-bottom: 1.2rem; }
+.desc-short p { margin-bottom: 0; }
+.desc-full { display: none; font-size: 0.82rem; line-height: 1.6; }
+.desc-short.open + .desc-full { display: block; }
+.desc-short.open .desc-toggle { display: none; }
+.desc-toggle {
+    background: none; border: none; color: var(--accent2); font-size: 0.78rem;
+    font-weight: 600; cursor: pointer; padding: 0.2rem 0; font-family: 'Montserrat', sans-serif;
+    transition: color 0.2s; display: inline; letter-spacing: 0;
+}
+.desc-toggle:hover { color: var(--accent); }
+
+.detail-desc-short { display: inline; }
+.detail-desc-full { display: none; }
+#detail-desc .desc-toggle {
+    background: none; border: none; color: var(--accent2); font-size: 0.9rem;
+    font-weight: 600; cursor: pointer; padding: 0; font-family: 'Montserrat', sans-serif;
+    margin: 0.5rem 0; display: block; transition: color 0.2s; letter-spacing: 0;
+}
+#detail-desc .desc-toggle:hover { color: var(--accent); }
 
 .about { padding: 5rem 0; border-top: 1px solid var(--border); }
 .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
@@ -572,6 +587,15 @@ footer {
     text-transform: uppercase; letter-spacing: 1px;
 }
 .btn-detail-cart:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,132,60,0.3); }
+.detail-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.btn-detail-gocart {
+    background: transparent; color: var(--accent2); border: 2px solid var(--accent);
+    padding: 1rem 2rem; border-radius: 6px; font-weight: 700; font-size: 1rem;
+    font-family: 'Montserrat', sans-serif; cursor: pointer; transition: 0.3s;
+    text-transform: uppercase; letter-spacing: 1px; text-decoration: none;
+    display: inline-flex; align-items: center;
+}
+.btn-detail-gocart:hover { background: var(--accent); color: var(--bg); }
 
 .zoom-overlay {
     display: none; position: fixed; z-index: 500; top: 0; left: 0; width: 100%; height: 100%;
@@ -983,6 +1007,26 @@ footer {
 }
 .scroll-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 .scroll-top:hover { background: var(--accent2); transform: translateY(-4px); }
+
+.cart-fab {
+    position: fixed; bottom: 2rem; right: 5rem; z-index: 400;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--accent); color: var(--bg); border: none;
+    font-size: 1.5rem; cursor: pointer; text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden; transform: scale(0.5);
+    transition: opacity 0.4s, visibility 0.4s, transform 0.4s cubic-bezier(.2,.5,0,1), background 0.3s;
+    box-shadow: 0 4px 20px rgba(200,132,60,0.4);
+}
+.cart-fab.visible { opacity: 1; visibility: visible; transform: scale(1); }
+.cart-fab:hover { background: var(--accent2); transform: scale(1.1); }
+.cart-fab-count {
+    position: absolute; top: -4px; right: -4px;
+    background: var(--bg); color: var(--accent2); font-size: 0.7rem;
+    font-weight: 800; width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--accent);
+}
 
 .fade-up {
     opacity: 0;

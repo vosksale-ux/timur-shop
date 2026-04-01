@@ -23,7 +23,7 @@
             font-size: 1.5rem; margin-bottom: 0.5rem; letter-spacing: 1px;
         }
         .login-box p {
-            color: var(--text2); font-size: 0.9rem; margin-bottom: 2rem;
+            color: var(--text2); font-size: 0.9rem; margin-bottom: 2.5rem;
         }
         .login-error {
             color: var(--danger); font-size: 0.85rem; margin-top: 1rem;
@@ -36,7 +36,7 @@
 
     <div class="login-overlay" id="login-overlay">
         <div class="login-box">
-            <h2>🔐 Вход</h2>
+            <h2>Вход</h2>
             <p>Введите пароль для доступа к админке</p>
             <form onsubmit="checkPassword(event)">
                 <input type="password" id="admin-pass" class="input-field" placeholder="Пароль" required autocomplete="current-password">
@@ -83,7 +83,7 @@
                 </div>
                 <div class="form-row-full">
                     <div class="file-upload">
-                        <label class="file-label" for="f-images">📷 Фото товара (можно выбрать несколько)</label>
+                        <label class="file-label" for="f-images">Фото товара (можно выбрать несколько)</label>
                         <input type="file" id="f-images" name="images" accept="image/*" multiple onchange="previewImages(this)">
                         <div id="new-images-preview" class="images-preview"></div>
                     </div>
@@ -118,6 +118,8 @@
     <div id="toast" class="toast"></div>
 
     <script>
+        var ADMIN_TOKEN_KEY = 'timur_admin_token';
+
         function toggleMenu() {
             document.getElementById('burger').classList.toggle('active');
             document.getElementById('nav-links').classList.toggle('open');
@@ -138,29 +140,49 @@
             bags: 'Сумки'
         };
 
-        var ADMIN_PASS = 'password';
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
 
         function checkPassword(e) {
             e.preventDefault();
             var pass = document.getElementById('admin-pass').value;
-            if (pass === ADMIN_PASS) {
-                sessionStorage.setItem('admin_auth', '1');
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass })
+            })
+            .then(function(res) {
+                if (!res.ok) throw new Error('Неверный пароль');
+                return res.json();
+            })
+            .then(function(data) {
+                sessionStorage.setItem(ADMIN_TOKEN_KEY, data.token);
                 document.getElementById('login-overlay').classList.add('hidden');
                 document.getElementById('logout-link').style.display = 'inline';
                 loadProducts();
-            } else {
+            })
+            .catch(function() {
                 document.getElementById('login-error').classList.add('show');
                 document.getElementById('admin-pass').value = '';
-            }
+            });
         }
 
         function logout() {
-            sessionStorage.removeItem('admin_auth');
+            sessionStorage.removeItem(ADMIN_TOKEN_KEY);
             location.reload();
         }
 
+        function getAuthHeaders() {
+            var token = sessionStorage.getItem(ADMIN_TOKEN_KEY);
+            return { 'Authorization': 'Bearer ' + token };
+        }
+
         (function checkAuth() {
-            if (sessionStorage.getItem('admin_auth') === '1') {
+            var token = sessionStorage.getItem(ADMIN_TOKEN_KEY);
+            if (token) {
                 document.getElementById('login-overlay').classList.add('hidden');
                 document.getElementById('logout-link').style.display = 'inline';
                 loadProducts();
@@ -184,25 +206,27 @@
                     tbody.innerHTML = '';
                     products.forEach(function (p) {
                         var imgHtml = p.images && p.images.length > 0
-                            ? '<img src="' + p.images[0] + '" class="td-thumb">'
+                            ? '<img src="' + escapeHtml(p.images[0]) + '" class="td-thumb">'
                             : '<div class="td-no-img">📦</div>';
                         var imgCount = p.images && p.images.length > 0
                             ? ' <small style="color:#666">(' + p.images.length + ' фото)</small>'
                             : '';
-                        tbody.innerHTML += '<tr>' +
+                        var row = document.createElement('tr');
+                        row.innerHTML =
                             '<td>' + imgHtml + '</td>' +
-                            '<td><strong>' + p.name + '</strong>' + imgCount + '<br><small style="color:#888">' + p.desc + '</small></td>' +
-                            '<td>' + (CATEGORIES[p.category] || p.category) + '</td>' +
+                            '<td><strong>' + escapeHtml(p.name) + '</strong>' + imgCount + '<br><small style="color:#888">' + escapeHtml(p.desc) + '</small></td>' +
+                            '<td>' + (CATEGORIES[p.category] || escapeHtml(p.category)) + '</td>' +
                             '<td class="td-price">' + p.price.toLocaleString('ru-RU') + ' ₽</td>' +
                             '<td class="td-actions">' +
-                                '<button class="btn-edit" onclick="editProduct(' + p.id + ')">✏️</button>' +
-                                '<button class="btn-delete" onclick="deleteProduct(' + p.id + ')">🗑️</button>' +
-                            '</td>' +
-                        '</tr>';
+                                '<button class="btn-edit" data-id="' + p.id + '">✏️</button>' +
+                                '<button class="btn-delete" data-id="' + p.id + '">🗑️</button>' +
+                            '</td>';
+                        row.querySelector('.btn-edit').addEventListener('click', function() { editProduct(p.id); });
+                        row.querySelector('.btn-delete').addEventListener('click', function() { deleteProduct(p.id); });
+                        tbody.appendChild(row);
                     });
                 })
                 .catch(function (err) {
-                    console.error('loadProducts error:', err);
                     showToast('Ошибка загрузки товаров');
                 });
         }
@@ -215,7 +239,13 @@
                     (function(file) {
                         var reader = new FileReader();
                         reader.onload = function (e) {
-                            preview.innerHTML += '<div class="preview-thumb-wrap"><img src="' + e.target.result + '" class="preview-thumb"></div>';
+                            var wrap = document.createElement('div');
+                            wrap.className = 'preview-thumb-wrap';
+                            var img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'preview-thumb';
+                            wrap.appendChild(img);
+                            preview.appendChild(wrap);
                         };
                         reader.readAsDataURL(file);
                     })(input.files[i]);
@@ -233,10 +263,19 @@
             }
             section.style.display = 'block';
             images.forEach(function (src) {
-                grid.innerHTML += '<div class="edit-img-item">' +
-                    '<img src="' + src + '" class="edit-img-thumb">' +
-                    '<button type="button" class="edit-img-remove" onclick="removeImage(\'' + src + '\')">✕</button>' +
-                '</div>';
+                var item = document.createElement('div');
+                item.className = 'edit-img-item';
+                var img = document.createElement('img');
+                img.src = src;
+                img.className = 'edit-img-thumb';
+                item.appendChild(img);
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'edit-img-remove';
+                btn.textContent = '✕';
+                btn.addEventListener('click', function() { removeImage(src); });
+                item.appendChild(btn);
+                grid.appendChild(item);
             });
         }
 
@@ -245,7 +284,7 @@
             if (!confirm('Удалить это фото?')) return;
             fetch('/api/products/' + editingProductId + '/images', {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
                 body: JSON.stringify({ image: src })
             })
             .then(function (res) { return res.json(); })
@@ -258,42 +297,41 @@
         function saveProduct(e) {
             e.preventDefault();
             var id = document.getElementById('edit-id').value;
-            
-            // Validate form
+
             var name = document.getElementById('f-name').value.trim();
             var desc = document.getElementById('f-desc').value.trim();
             var priceStr = document.getElementById('f-price').value.trim();
             var category = document.getElementById('f-category').value;
-            
+
             if (!name) {
                 showToast('Введите название товара');
                 document.getElementById('f-name').focus();
                 return;
             }
-            
+
             if (!priceStr) {
                 showToast('Введите цену товара');
                 document.getElementById('f-price').focus();
                 return;
             }
-            
+
             var price = Number(priceStr);
             if (isNaN(price) || price <= 0) {
                 showToast('Цена должна быть положительным числом');
                 document.getElementById('f-price').focus();
                 return;
             }
-            
+
             if (!category) {
                 showToast('Выберите категорию');
                 document.getElementById('f-category').focus();
                 return;
             }
-            
+
             var formData = new FormData();
             formData.append('name', name);
             formData.append('desc', desc);
-            formData.append('price', priceStr); // Send as string to avoid floating point issues
+            formData.append('price', priceStr);
             formData.append('category', category);
             var fileInput = document.getElementById('f-images');
             if (fileInput.files) {
@@ -305,28 +343,19 @@
             var url = id ? '/api/products/' + id : '/api/products';
             var method = id ? 'PUT' : 'POST';
 
-            console.log('saveProduct called:', { url, method, name, desc, price, category });
-            console.log('FormData entries:');
-            for (var pair of formData.entries()) {
-                console.log(pair[0], pair[1]);
-            }
-
-            fetch(url, { method: method, body: formData })
+            fetch(url, { method: method, body: formData, headers: getAuthHeaders() })
             .then(function (res) {
-                console.log('Response status:', res.status);
                 return res.json().then(function(data) {
                     if (!res.ok) throw new Error(data.error || 'Ошибка сохранения');
                     return data;
                 });
             })
             .then(function (data) {
-                console.log('Response data:', data);
                 showToast(id ? 'Товар обновлён' : 'Товар добавлен');
                 cancelEdit();
                 loadProducts();
             })
             .catch(function (err) {
-                console.error('saveProduct error:', err);
                 showToast('Ошибка сохранения: ' + err.message);
             });
         }
@@ -353,11 +382,14 @@
 
         function deleteProduct(id) {
             if (!confirm('Удалить этот товар?')) return;
-            fetch('/api/products/' + id, { method: 'DELETE' })
-                .then(function () {
-                    showToast('Товар удалён');
-                    loadProducts();
-                });
+            fetch('/api/products/' + id, {
+                method: 'DELETE',
+                headers: getAuthHeaders()
+            })
+            .then(function () {
+                showToast('Товар удалён');
+                loadProducts();
+            });
         }
 
         function cancelEdit() {
