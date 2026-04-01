@@ -1199,8 +1199,8 @@ footer {
 }
 .video-modal-close:hover { opacity: 0.7; }
 .video-modal-body {
-    width: 90%;
-    max-width: 640px;
+    width: 70%;
+    max-width: 480px;
     overflow: visible;
 }
 .video-modal-body video {
