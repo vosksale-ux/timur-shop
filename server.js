@@ -164,7 +164,7 @@ function readSiteData() {
     if (fs.existsSync(SITE_DATA_FILE)) {
         return JSON.parse(fs.readFileSync(SITE_DATA_FILE, 'utf-8'));
     }
-    return { video: null };
+    return { videos: [] };
 }
 
 function writeSiteData(data) {
@@ -175,34 +175,41 @@ app.get('/api/site-data', function (req, res) {
     res.json(readSiteData());
 });
 
-app.post('/api/site-data/video', adminAuth, upload.single('video'), function (req, res) {
+app.post('/api/videos', adminAuth, upload.single('video'), function (req, res) {
     try {
         var data = readSiteData();
+        if (!data.videos) data.videos = [];
+        var id = Date.now();
+        var title = req.body.title || 'Без названия';
+        var url = null;
         if (req.file) {
-            data.video = '/uploads/' + req.file.filename;
-            writeSiteData(data);
-            res.json({ ok: true, video: data.video });
+            url = '/uploads/' + req.file.filename;
         } else if (req.body.url) {
-            data.video = req.body.url;
-            writeSiteData(data);
-            res.json({ ok: true, video: data.video });
+            url = req.body.url;
         } else {
-            res.status(400).json({ error: 'Укажите файл или URL' });
+            return res.status(400).json({ error: 'Укажите файл или URL' });
         }
+        data.videos.push({ id: id, title: title, url: url });
+        writeSiteData(data);
+        res.json({ ok: true, video: data.videos[data.videos.length - 1] });
     } catch (err) {
         console.error('Video upload error:', err);
         res.status(500).json({ error: err.message });
     }
 });
 
-app.delete('/api/site-data/video', adminAuth, function (req, res) {
+app.delete('/api/videos/:id', adminAuth, function (req, res) {
     try {
         var data = readSiteData();
-        if (data.video && data.video.startsWith('/uploads/')) {
-            var fp = path.join(__dirname, data.video.replace(/^\//, ''));
+        var id = Number(req.params.id);
+        var idx = data.videos.findIndex(function (v) { return v.id === id; });
+        if (idx === -1) return res.status(404).json({ error: 'Видео не найдено' });
+        var removed = data.videos[idx];
+        if (removed.url && removed.url.startsWith('/uploads/')) {
+            var fp = path.join(__dirname, removed.url.replace(/^\//, ''));
             if (fs.existsSync(fp) && fp.startsWith(UPLOAD_DIR)) fs.unlinkSync(fp);
         }
-        data.video = null;
+        data.videos.splice(idx, 1);
         writeSiteData(data);
         res.json({ ok: true });
     } catch (err) {

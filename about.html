@@ -144,10 +144,12 @@
 
             <div class="info-section fade-up">
                 <h2 class="info-section-title">Видео из мастерской</h2>
-                <div class="video-wrapper" id="about-video-wrapper">
-                    <div id="about-video-placeholder" style="width:100%;aspect-ratio:16/9;background:#1a1714;display:flex;align-items:center;justify-content:center;border-radius:12px;color:#8a8279;font-size:1.1rem;">Видео скоро появится</div>
-                </div>
-                </div>
+                <div class="video-gallery" id="video-gallery"></div>
+            </div>
+
+            <div class="video-modal" id="video-modal" onclick="closeVideoModal(event)">
+                <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Закрыть">&times;</button>
+                <div class="video-modal-body" id="video-modal-body"></div>
             </div>
 
             <div class="info-section fade-up">
@@ -249,27 +251,65 @@
 
         var saved = localStorage.getItem('timur_cart');
         var cart = saved ? JSON.parse(saved) : [];
-        document.getElementById('cart-count').textContent = cart.reduce(function(s,i){ return s+i.qty; }, 0);
+        var cartEl = document.getElementById('cart-count');
+        if (cartEl) cartEl.textContent = cart.reduce(function(s,i){ return s+i.qty; }, 0);
 
-        (function loadVideo() {
+        (function loadVideoGallery() {
             fetch('/api/site-data')
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
-                    if (!data.video) return;
                     var wrapper = document.getElementById('about-video-wrapper');
                     var placeholder = document.getElementById('about-video-placeholder');
+                    if (!data.videos || data.videos.length === 0) return;
                     if (placeholder) placeholder.style.display = 'none';
-                    var ytMatch = data.video.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
-                    var vmMatch = data.video.match(/vimeo\.com\/(\d+)/);
-                    if (ytMatch) {
-                        wrapper.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:16/9;border-radius:12px"></iframe>';
-                    } else if (vmMatch) {
-                        wrapper.innerHTML = '<iframe src="https://player.vimeo.com/video/' + vmMatch[1] + '" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:16/9;border-radius:12px"></iframe>';
-                    } else {
-                        wrapper.innerHTML = '<video src="' + data.video + '" controls style="width:100%;border-radius:12px"></video>';
-                    }
+                    wrapper.innerHTML = '';
+                    data.videos.forEach(function (v) {
+                        var card = document.createElement('div');
+                        card.className = 'video-gallery-item';
+                        card.onclick = function () { openVideoModal(v); };
+                        var ytMatch = v.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
+                        var isFile = v.url.match(/\.(mp4|webm)(\?|$)/i);
+                        if (ytMatch) {
+                            card.innerHTML = '<img src="https://img.youtube.com/vi/' + ytMatch[1] + '/mqdefault.jpg" alt="' + escapeHtml(v.title) + '"><span class="video-gallery-play">▶</span>';
+                        } else if (isFile) {
+                            card.innerHTML = '<div class="video-gallery-thumb-file">🎬</div><span class="video-gallery-play">▶</span>';
+                        } else {
+                            card.innerHTML = '<div class="video-gallery-thumb-url">🔗</div><span class="video-gallery-play">▶</span>';
+                        }
+                        var label = document.createElement('div');
+                        label.className = 'video-gallery-label';
+                        label.textContent = v.title;
+                        card.appendChild(label);
+                        wrapper.appendChild(card);
+                    });
                 });
         })();
+
+        function openVideoModal(video) {
+            var modal = document.getElementById('video-modal');
+            var body = document.getElementById('video-modal-body');
+            var title = document.getElementById('video-modal-title');
+            title.textContent = video.title;
+            var ytMatch = video.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
+            var vmMatch = video.url.match(/vimeo\.com\/(\d+)/);
+            if (ytMatch) {
+                body.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:16/9;border-radius:8px"></iframe>';
+            } else if (vmMatch) {
+                body.innerHTML = '<iframe src="https://player.vimeo.com/video/' + vmMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:16/9;border-radius:8px"></iframe>';
+            } else {
+                body.innerHTML = '<video src="' + video.url + '" controls playsinline autoplay style="width:100%;max-height:70vh;border-radius:8px"></video>';
+            }
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal() {
+            var modal = document.getElementById('video-modal');
+            var body = document.getElementById('video-modal-body');
+            modal.classList.remove('open');
+            body.innerHTML = '';
+            document.body.style.overflow = '';
+        }
     </script>
 </body>
 </html>

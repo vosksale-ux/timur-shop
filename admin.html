@@ -64,20 +64,22 @@
 
         <div class="admin-form-card" style="margin-bottom:2rem">
             <h2>Видео «О нас»</h2>
-            <p style="color:var(--text2);font-size:0.85rem;margin-bottom:1rem">Это видео отображается на странице «О нас» в секции «Видео из мастерской».</p>
-            <div id="video-current" style="margin-bottom:1rem"></div>
-            <form id="video-form" onsubmit="uploadVideo(event)" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:flex-end">
-                <div style="flex:1;min-width:200px">
-                    <label class="file-label" for="video-file">Загрузить видео (MP4)</label>
+            <p style="color:var(--text2);font-size:0.85rem;margin-bottom:1rem">Добавляйте видео — они отображаются в галерее на странице «О нас».</p>
+            <form id="video-form" onsubmit="addVideo(event)" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:flex-end">
+                <div style="flex:1;min-width:180px">
+                    <input type="text" id="video-title" class="input-field" placeholder="Название ролика *" required>
+                </div>
+                <div style="flex:1;min-width:180px">
+                    <label class="file-label" for="video-file">MP4 файл</label>
                     <input type="file" id="video-file" accept="video/mp4,video/webm" class="input-field" style="padding:0.5rem">
                 </div>
                 <span style="color:var(--text2);font-size:0.85rem;padding:0.75rem 0">или</span>
-                <div style="flex:1;min-width:200px">
-                    <input type="url" id="video-url" class="input-field" placeholder="URL видео (YouTube, Vimeo...)">
+                <div style="flex:1;min-width:180px">
+                    <input type="url" id="video-url" class="input-field" placeholder="URL (YouTube, Vimeo)">
                 </div>
-                <button type="submit" class="btn-save" style="white-space:nowrap">Сохранить</button>
-                <button type="button" class="btn-cancel" id="btn-video-delete" onclick="deleteVideo()" style="display:none">Удалить</button>
+                <button type="submit" class="btn-save" style="white-space:nowrap">Добавить</button>
             </form>
+            <div id="videos-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-top:1.5rem"></div>
         </div>
 
         <div class="admin-form-card">
@@ -428,57 +430,81 @@
             setTimeout(function () { toast.classList.remove('show'); }, 2500);
         }
 
-        function loadVideo() {
+        function getVideoThumb(url) {
+            var ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
+            if (ytMatch) return 'https://img.youtube.com/vi/' + ytMatch[1] + '/mqdefault.jpg';
+            var vmMatch = url.match(/vimeo\.com\/(\d+)/);
+            if (vmMatch) return 'https://vumbnail.com/' + vmMatch[1] + '.jpg';
+            if (url.match(/\.(mp4|webm)(\?|$)/i)) return '';
+            return '';
+        }
+
+        function isYouTube(url) { return /(?:youtube\.com|youtu\.be)/.test(url); }
+        function isVimeo(url) { return /vimeo\.com/.test(url); }
+
+        function loadVideos() {
             fetch('/api/site-data')
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
-                    var wrap = document.getElementById('video-current');
-                    var btn = document.getElementById('btn-video-delete');
-                    if (data.video) {
-                        if (data.video.match(/\.(mp4|webm)(\?|$)/i)) {
-                            wrap.innerHTML = '<video src="' + escapeHtml(data.video) + '" controls style="width:100%;max-width:480px;border-radius:8px;margin-top:0.5rem"></video>';
-                        } else {
-                            wrap.innerHTML = '<div style="margin-top:0.5rem;padding:1rem;background:var(--bg2);border-radius:8px;color:var(--accent2);word-break:break-all"><strong>URL:</strong> ' + escapeHtml(data.video) + '</div>';
-                        }
-                        btn.style.display = 'inline-block';
-                    } else {
-                        wrap.innerHTML = '<p style="color:var(--text2);font-size:0.85rem;margin-top:0.5rem">Видео не загружено</p>';
-                        btn.style.display = 'none';
+                    var list = document.getElementById('videos-list');
+                    list.innerHTML = '';
+                    if (!data.videos || data.videos.length === 0) {
+                        list.innerHTML = '<p style="color:var(--text2);font-size:0.85rem;grid-column:1/-1">Видео не добавлены</p>';
+                        return;
                     }
+                    data.videos.forEach(function (v) {
+                        var card = document.createElement('div');
+                        card.className = 'video-admin-card';
+                        var thumb = getVideoThumb(v.url);
+                        var isFile = v.url.startsWith('/uploads/');
+                        var thumbHtml = thumb
+                            ? '<img src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(v.title) + '">'
+                            : isFile
+                                ? '<div class="video-admin-thumb-file">🎬 MP4</div>'
+                                : '<div class="video-admin-thumb-url">🔗</div>';
+                        card.innerHTML = thumbHtml +
+                            '<div class="video-admin-info">' +
+                                '<strong>' + escapeHtml(v.title) + '</strong>' +
+                                '<small>' + (isYouTube(v.url) ? 'YouTube' : isVimeo(v.url) ? 'Vimeo' : isFile ? 'Файл' : 'URL') + '</small>' +
+                            '</div>' +
+                            '<button class="video-admin-del" data-id="' + v.id + '">✕</button>';
+                        card.querySelector('.video-admin-del').addEventListener('click', function () { removeVideo(v.id); });
+                        list.appendChild(card);
+                    });
                 });
         }
 
-        function uploadVideo(e) {
+        function addVideo(e) {
             e.preventDefault();
+            var title = document.getElementById('video-title').value.trim();
             var fileInput = document.getElementById('video-file');
             var urlInput = document.getElementById('video-url');
 
             if (fileInput.files && fileInput.files.length > 0) {
                 var formData = new FormData();
                 formData.append('video', fileInput.files[0]);
-                fetch('/api/site-data/video', { method: 'POST', body: formData, headers: getAuthHeaders() })
+                formData.append('title', title);
+                fetch('/api/videos', { method: 'POST', body: formData, headers: getAuthHeaders() })
                     .then(function (res) { return res.json(); })
-                    .then(function (data) {
-                        if (data.error) throw new Error(data.error);
-                        showToast('Видео загружено');
-                        loadVideo();
-                        fileInput.value = '';
-                        urlInput.value = '';
+                    .then(function (d) {
+                        if (d.error) throw new Error(d.error);
+                        showToast('Видео добавлено');
+                        loadVideos();
+                        document.getElementById('video-form').reset();
                     })
                     .catch(function (err) { showToast('Ошибка: ' + err.message); });
             } else if (urlInput.value.trim()) {
-                fetch('/api/site-data/video', {
+                fetch('/api/videos', {
                     method: 'POST',
                     headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
-                    body: JSON.stringify({ url: urlInput.value.trim() })
+                    body: JSON.stringify({ title: title, url: urlInput.value.trim() })
                 })
                 .then(function (res) { return res.json(); })
-                .then(function (data) {
-                    if (data.error) throw new Error(data.error);
-                    showToast('Видео сохранено');
-                    loadVideo();
-                    urlInput.value = '';
-                    fileInput.value = '';
+                .then(function (d) {
+                    if (d.error) throw new Error(d.error);
+                    showToast('Видео добавлено');
+                    loadVideos();
+                    document.getElementById('video-form').reset();
                 })
                 .catch(function (err) { showToast('Ошибка: ' + err.message); });
             } else {
@@ -486,16 +512,16 @@
             }
         }
 
-        function deleteVideo() {
-            if (!confirm('Удалить видео?')) return;
-            fetch('/api/site-data/video', { method: 'DELETE', headers: getAuthHeaders() })
+        function removeVideo(id) {
+            if (!confirm('Удалить это видео?')) return;
+            fetch('/api/videos/' + id, { method: 'DELETE', headers: getAuthHeaders() })
                 .then(function () {
                     showToast('Видео удалено');
-                    loadVideo();
+                    loadVideos();
                 });
         }
 
-        loadVideo();
+        loadVideos();
     </script>
 </body>
 </html>
