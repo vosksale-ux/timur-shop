@@ -150,7 +150,7 @@
             <div class="video-modal" id="video-modal" onclick="closeVideoModal(event)" data-lenis-prevent>
                 <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Закрыть">&times;</button>
                 <h3 id="video-modal-title" style="color:#fff;text-align:center;margin-bottom:1rem;font-size:1.1rem"></h3>
-                <div class="video-modal-body" id="video-modal-body" style="max-width:640px;width:90%"></div>
+                <div class="video-modal-body" id="video-modal-body"></div>
             </div>
 
             <div class="info-section fade-up">
@@ -295,11 +295,11 @@
             var ytMatch = video.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
             var vmMatch = video.url.match(/vimeo\.com\/(\d+)/);
             if (ytMatch) {
-                body.innerHTML = '<div style="max-width:640px;width:100%;margin:0 auto"><div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden"><iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px"></iframe></div></div>';
+                body.innerHTML = '<div style="max-width:420px;width:100%;margin:0 auto"><div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden"><iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%"></iframe></div></div>';
             } else if (vmMatch) {
-                body.innerHTML = '<div style="max-width:640px;width:100%;margin:0 auto"><div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden"><iframe src="https://player.vimeo.com/video/' + vmMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px"></iframe></div></div>';
+                body.innerHTML = '<div style="max-width:420px;width:100%;margin:0 auto"><div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden"><iframe src="https://player.vimeo.com/video/' + vmMatch[1] + '?autoplay=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%"></iframe></div></div>';
             } else {
-                body.innerHTML = '<video src="' + video.url + '" controls playsinline autoplay preload="auto" style="width:100%;max-width:640px;display:block;margin:0 auto"></video>';
+                body.innerHTML = '<video src="' + video.url + '" controls playsinline autoplay preload="auto" style="width:100%;max-width:420px;display:block;margin:0 auto"></video>';
             }
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
