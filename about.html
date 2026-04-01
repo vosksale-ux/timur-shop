@@ -313,18 +313,6 @@
             body.innerHTML = '';
             document.body.style.overflow = '';
         }
-            modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeVideoModal(e) {
-            if (e && e.target !== document.getElementById('video-modal') && !e.target.classList.contains('video-modal-close')) return;
-            var modal = document.getElementById('video-modal');
-            var body = document.getElementById('video-modal-body');
-            modal.classList.remove('open');
-            body.innerHTML = '';
-            document.body.style.overflow = '';
-        }
-    </script>
+     </script>
 </body>
 </html>
