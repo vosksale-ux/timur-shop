@@ -7,12 +7,14 @@ const crypto = require('crypto');
 const app = express();
 const PORT = 3000;
 const DATA_FILE = path.join(__dirname, 'data', 'products.json');
+const SITE_DATA_FILE = path.join(__dirname, 'data', 'site-data.json');
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 const ADMIN_TOKEN = crypto.randomBytes(32).toString('hex');
 
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 if (!fs.existsSync(path.join(__dirname, 'data'))) fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, '[]', 'utf-8');
+if (!fs.existsSync(SITE_DATA_FILE)) fs.writeFileSync(SITE_DATA_FILE, '{}', 'utf-8');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) { cb(null, UPLOAD_DIR); },
@@ -156,6 +158,56 @@ app.delete('/api/products/:id', adminAuth, function (req, res) {
         });
     }
     res.json({ ok: true });
+});
+
+function readSiteData() {
+    if (fs.existsSync(SITE_DATA_FILE)) {
+        return JSON.parse(fs.readFileSync(SITE_DATA_FILE, 'utf-8'));
+    }
+    return { video: null };
+}
+
+function writeSiteData(data) {
+    fs.writeFileSync(SITE_DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+app.get('/api/site-data', function (req, res) {
+    res.json(readSiteData());
+});
+
+app.post('/api/site-data/video', adminAuth, upload.single('video'), function (req, res) {
+    try {
+        var data = readSiteData();
+        if (req.file) {
+            data.video = '/uploads/' + req.file.filename;
+            writeSiteData(data);
+            res.json({ ok: true, video: data.video });
+        } else if (req.body.url) {
+            data.video = req.body.url;
+            writeSiteData(data);
+            res.json({ ok: true, video: data.video });
+        } else {
+            res.status(400).json({ error: 'Укажите файл или URL' });
+        }
+    } catch (err) {
+        console.error('Video upload error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/site-data/video', adminAuth, function (req, res) {
+    try {
+        var data = readSiteData();
+        if (data.video && data.video.startsWith('/uploads/')) {
+            var fp = path.join(__dirname, data.video.replace(/^\//, ''));
+            if (fs.existsSync(fp) && fp.startsWith(UPLOAD_DIR)) fs.unlinkSync(fp);
+        }
+        data.video = null;
+        writeSiteData(data);
+        res.json({ ok: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 app.delete('/api/products/:id/images', adminAuth, function (req, res) {
