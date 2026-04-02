@@ -16,6 +16,12 @@ if (!fs.existsSync(path.join(__dirname, 'data'))) fs.mkdirSync(path.join(__dirna
 if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, '[]', 'utf-8');
 if (!fs.existsSync(SITE_DATA_FILE)) fs.writeFileSync(SITE_DATA_FILE, '{}', 'utf-8');
 
+var VALID_CATEGORIES = ['wallets', 'belts', 'bags', 'covers', 'accessories'];
+
+var loginAttempts = {};
+var LOGIN_LIMIT = 5;
+var LOGIN_WINDOW = 15 * 60 * 1000;
+
 var storage = multer.diskStorage({
     destination: function (req, file, cb) { cb(null, UPLOAD_DIR); },
     filename: function (req, file, cb) {
@@ -62,8 +68,18 @@ function adminAuth(req, res, next) {
 }
 
 app.post('/api/login', function (req, res) {
+    var ip = req.ip || req.connection.remoteAddress;
+    var now = Date.now();
+    if (!loginAttempts[ip]) loginAttempts[ip] = [];
+    loginAttempts[ip] = loginAttempts[ip].filter(function(t) { return now - t < LOGIN_WINDOW; });
+    if (loginAttempts[ip].length >= LOGIN_LIMIT) {
+        return res.status(429).json({ error: 'Слишком много попыток. Попробуйте позже' });
+    }
+    loginAttempts[ip].push(now);
+
     var pass = req.body.password;
-    if (pass === 'timur2024') {
+    var adminPassword = process.env.ADMIN_PASSWORD || 'timur2024';
+    if (pass === adminPassword) {
         res.json({ token: ADMIN_TOKEN });
     } else {
         res.status(401).json({ error: 'Неверный пароль' });
@@ -99,6 +115,9 @@ app.post('/api/products', adminAuth, function (req, res, next) {
             if (!name || !priceStr || !category) {
                 return res.status(400).json({ error: 'Заполните название, цену и категорию' });
             }
+            if (VALID_CATEGORIES.indexOf(category) === -1) {
+                return res.status(400).json({ error: 'Недопустимая категория' });
+            }
             var price = Number(priceStr);
             if (isNaN(price) || price <= 0) {
                 return res.status(400).json({ error: 'Цена должна быть положительным числом' });
@@ -130,6 +149,9 @@ app.put('/api/products/:id', adminAuth, function (req, res, next) {
             products[index].desc = req.body.desc !== undefined ? req.body.desc : products[index].desc;
             products[index].price = req.body.price !== undefined ? Number(req.body.price) : products[index].price;
             products[index].category = req.body.category || products[index].category;
+            if (req.body.category && VALID_CATEGORIES.indexOf(req.body.category) === -1) {
+                return res.status(400).json({ error: 'Недопустимая категория' });
+            }
             if (req.files && req.files.length > 0) {
                 var newImages = req.files.map(function (f) { return '/uploads/' + f.filename; });
                 products[index].images = products[index].images.concat(newImages);

@@ -63,6 +63,7 @@
             <a href="cart.html" class="cart-btn" aria-label="Корзина">
                 🛒 <span id="cart-count">0</span>
             </a>
+            <a href="tel:+79990000000" class="header-phone" aria-label="Позвонить">📞</a>
         </div>
     </header>
 
@@ -105,27 +106,27 @@
             <h2 class="section-title fade-up">Категории</h2>
             <p class="section-subtitle fade-up">Выберите то, что вам нужно</p>
             <div class="categories-grid">
-                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('wallets', document.querySelector('.filter-btn:nth-child(3)'))}, 300)">
+                <a href="#catalog" class="category-card fade-up" onclick="smoothScrollToCatalog('wallets', 3)">
                     <div class="category-icon">👛</div>
                     <h3>Кошельки</h3>
                     <span class="category-count" id="cat-wallets">0 товаров</span>
                 </a>
-                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('belts', document.querySelector('.filter-btn:nth-child(4)'))}, 300)">
+                <a href="#catalog" class="category-card fade-up" onclick="smoothScrollToCatalog('belts', 4)">
                     <div class="category-icon">👔</div>
                     <h3>Ремни</h3>
                     <span class="category-count" id="cat-belts">0 товаров</span>
                 </a>
-                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('bags', document.querySelector('.filter-btn:nth-child(6)'))}, 300)">
+                <a href="#catalog" class="category-card fade-up" onclick="smoothScrollToCatalog('bags', 6)">
                     <div class="category-icon">👜</div>
                     <h3>Сумки</h3>
                     <span class="category-count" id="cat-bags">0 товаров</span>
                 </a>
-                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('covers', document.querySelector('.filter-btn:nth-child(5)'))}, 300)">
+                <a href="#catalog" class="category-card fade-up" onclick="smoothScrollToCatalog('covers', 5)">
                     <div class="category-icon">📖</div>
                     <h3>Чехлы и обложки</h3>
                     <span class="category-count" id="cat-covers">0 товаров</span>
                 </a>
-                <a href="#catalog" class="category-card fade-up" onclick="setTimeout(function(){filterProducts('accessories', document.querySelector('.filter-btn:nth-child(2)'))}, 300)">
+                <a href="#catalog" class="category-card fade-up" onclick="smoothScrollToCatalog('accessories', 2)">
                     <div class="category-icon">✨</div>
                     <h3>Аксессуары</h3>
                     <span class="category-count" id="cat-accessories">0 товаров</span>
@@ -363,6 +364,7 @@
 
     <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="common.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
