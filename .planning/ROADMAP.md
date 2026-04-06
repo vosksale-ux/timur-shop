@@ -30,10 +30,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. JSON-файлы остаются корректными после принудительного завершения сервера во время записи (атомарная запись)
   4. В папке data/backups/ автоматически создаются резервные копии с вращением
   5. На всех страницах вместо фейковых контактов (+7999000000, href="#") отображаются реальные данные владельца
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 01-01-PLAN.md — Критические исправления: пароль из env var (SEC-01), запрет SVG (SEC-02), атомарная запись JSON (SEC-03)
+- [x] 01-01-PLAN.md — Критические исправления: пароль из env var (SEC-01), запрет SVG (SEC-02), атомарная запись JSON (SEC-03)
 - [ ] 01-02-PLAN.md — Middleware безопасности (helmet, compression, rate-limit) + система бэкапов (SEC-04, SEC-06, SEC-07, SEC-08)
 
 ### Phase 2: Orders Data & API
@@ -105,7 +105,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Foundation | 0/2 | Planned | - |
+| 1. Security Foundation | 1/2 | In Progress|  |
 | 2. Orders Data & API | 0/? | Not started | - |
 | 3. Orders Admin UI | 0/? | Not started | - |
 | 4. Dynamic Reviews | 0/? | Not started | - |
