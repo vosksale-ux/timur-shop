@@ -28,7 +28,7 @@ var storage = multer.diskStorage({
         cb(null, Date.now() + '-' + Math.round(Math.random() * 1000) + path.extname(file.originalname));
     }
 });
-var ALLOWED_IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+var ALLOWED_IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
 var ALLOWED_VIDEO_EXT = ['.mp4', '.webm'];
 var MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -80,7 +80,9 @@ function readProducts() {
 }
 
 function writeProducts(products) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(products, null, 2), 'utf-8');
+    var tmp = DATA_FILE + '.tmp';
+    fs.writeFileSync(tmp, JSON.stringify(products, null, 2), 'utf-8');
+    fs.renameSync(tmp, DATA_FILE);
 }
 
 function nextId(products) {
@@ -220,7 +222,9 @@ function readSiteData() {
 }
 
 function writeSiteData(data) {
-    fs.writeFileSync(SITE_DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    var tmp = SITE_DATA_FILE + '.tmp';
+    fs.writeFileSync(tmp, JSON.stringify(data, null, 2), 'utf-8');
+    fs.renameSync(tmp, SITE_DATA_FILE);
 }
 
 app.get('/api/site-data', function (req, res) {
