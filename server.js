@@ -28,7 +28,38 @@ var storage = multer.diskStorage({
         cb(null, Date.now() + '-' + Math.round(Math.random() * 1000) + path.extname(file.originalname));
     }
 });
-var upload = multer({ storage: storage });
+var ALLOWED_IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+var ALLOWED_VIDEO_EXT = ['.mp4', '.webm'];
+var MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+function fileFilter(allowed) {
+    return function (req, file, cb) {
+        var ext = path.extname(file.originalname).toLowerCase();
+        if (allowed.indexOf(ext) === -1) {
+            return cb(new Error('Недопустимый тип файла: ' + ext));
+        }
+        cb(null, true);
+    };
+}
+
+var upload = multer({
+    storage: storage,
+    limits: { fileSize: MAX_FILE_SIZE, files: 10 },
+    fileFilter: fileFilter(ALLOWED_IMAGE_EXT)
+});
+
+var uploadVideo = multer({
+    storage: storage,
+    limits: { fileSize: 50 * 1024 * 1024 },
+    fileFilter: fileFilter(ALLOWED_VIDEO_EXT)
+});
+
+var adminPassword = process.env.ADMIN_PASSWORD;
+if (!adminPassword) {
+    console.error('ОШИБКА: Задайте переменную окружения ADMIN_PASSWORD');
+    console.error('Пример: ADMIN_PASSWORD=your_password npm start');
+    process.exit(1);
+}
 
 app.use(express.json());
 
@@ -78,7 +109,6 @@ app.post('/api/login', function (req, res) {
     loginAttempts[ip].push(now);
 
     var pass = req.body.password;
-    var adminPassword = process.env.ADMIN_PASSWORD || 'timur2024';
     if (pass === adminPassword) {
         res.json({ token: ADMIN_TOKEN });
     } else {
@@ -197,8 +227,10 @@ app.get('/api/site-data', function (req, res) {
     res.json(readSiteData());
 });
 
-app.post('/api/videos', adminAuth, upload.single('video'), function (req, res) {
-    try {
+app.post('/api/videos', adminAuth, function (req, res, next) {
+    uploadVideo.single('video')(req, res, function (err) {
+        if (err) return res.status(400).json({ error: err.message });
+        try {
         var data = readSiteData();
         if (!data.videos) data.videos = [];
         var id = Date.now();
@@ -218,6 +250,7 @@ app.post('/api/videos', adminAuth, upload.single('video'), function (req, res) {
         console.error('Video upload error:', err);
         res.status(500).json({ error: err.message });
     }
+    });
 });
 
 app.delete('/api/videos/:id', adminAuth, function (req, res) {
@@ -257,5 +290,4 @@ app.delete('/api/products/:id/images', adminAuth, function (req, res) {
 app.listen(PORT, function () {
     console.log('TIMUR.SHOP запущен: http://localhost:' + PORT);
     console.log('Админка: http://localhost:' + PORT + '/admin.html');
-    console.log('Admin token: ' + ADMIN_TOKEN);
 });
