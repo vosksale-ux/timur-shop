@@ -124,6 +124,22 @@ header {
         repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(90,74,56,0.03) 80px, rgba(90,74,56,0.03) 81px),
         repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(90,74,56,0.03) 80px, rgba(90,74,56,0.03) 81px);
 }
+.hero-particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    background: var(--accent);
+    filter: blur(0.5px);
+    will-change: transform, opacity;
+    animation: particleFloat linear infinite;
+}
+@keyframes particleFloat {
+    0% { opacity: 0; transform: translateY(0) translateX(0); }
+    50% { opacity: 0.6; transform: translateY(calc(-1 * var(--p-travel, 120px))) translateX(calc(-1 * var(--p-drift, 20px))); }
+    100% { opacity: 0; transform: translateY(0) translateX(0); }
+}
+
 .hero::before {
     content: ''; position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%);
     width: 600px; height: 600px; border-radius: 50%;
@@ -140,8 +156,24 @@ header {
 .hero h1 {
     font-size: clamp(2rem, 6vw, 4rem); margin-bottom: 1.5rem; text-transform: uppercase;
     letter-spacing: 6px; font-weight: 900;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    position: relative; animation: fadeInUp 0.8s ease;
+    text-shadow: 0 2px 1px rgba(0,0,0,0.5), 0 -1px 0 rgba(200,132,60,0.15);
+    position: relative;
+}
+.lp-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: scale(1.4);
+    filter: blur(4px);
+    animation: letterpress 0.5s cubic-bezier(.2, .5, 0, 1) forwards;
+}
+.lp-accent {
+    color: var(--accent2);
+    text-shadow: 0 2px 1px rgba(0,0,0,0.5), 0 -1px 0 rgba(230,165,90,0.3), 0 0 20px rgba(200,132,60,0.15);
+}
+@keyframes letterpress {
+    0% { opacity: 0; transform: scale(1.4); filter: blur(4px); }
+    60% { opacity: 1; transform: scale(1.05); filter: blur(0); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
 }
 .accent { color: var(--accent2); }
 .hero-subtitle {
@@ -242,10 +274,6 @@ header {
 .advantage-card:hover {
     border-color: var(--accent); transform: translateY(-6px);
     box-shadow: 0 16px 40px rgba(0,0,0,0.3);
-}
-.advantages-grid .advantage-card:first-child {
-    grid-column: span 2;
-    grid-row: span 2;
 }
 .advantage-num {
     font-size: 3.5rem; font-weight: 900; color: var(--accent2);
@@ -785,7 +813,6 @@ footer {
     .video-modal-body { max-width: 90vw; }
     .contacts-grid { grid-template-columns: 1fr; }
     .values-grid { grid-template-columns: 1fr; }
-    .advantages-grid .advantage-card:first-child { grid-column: span 1; grid-row: span 1; }
 }
 @media (max-width: 480px) {
     .hero h1 { font-size: 1.8rem; }
@@ -1329,7 +1356,64 @@ footer {
     outline-offset: 2px;
 }
 
+.cursor-glow {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,132,60,0.1) 0%, rgba(200,132,60,0.04) 30%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    transition: left 0.15s ease-out, top 0.15s ease-out, width 0.4s, height 0.4s, opacity 0.4s;
+    will-change: left, top;
+    opacity: 0;
+}
+.cursor-glow.active { opacity: 1; }
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 9998;
+    background: transparent;
+    pointer-events: none;
+}
+.scroll-progress-fill {
+    height: 100%;
+    width: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--accent) 0,
+        var(--accent) 10px,
+        transparent 10px,
+        transparent 14px
+    );
+    transition: width 0.1s linear;
+}
+
+@media (max-width: 768px) {
+    .cursor-glow { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
+    .cursor-glow { display: none !important; }
+    .scroll-progress-fill { transition: none; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+.cursor-glow.active { opacity: 1; }
+.product:hover ~ .cursor-glow,
+.product:hover .cursor-glow { opacity: 1; }
+
+@media (max-width: 768px) {
+    .cursor-glow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cursor-glow { display: none !important; }
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;

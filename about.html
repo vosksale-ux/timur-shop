@@ -252,6 +252,10 @@
             body.innerHTML = '';
             document.body.style.overflow = '';
         }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeVideoModal();
+        });
      </script>
 </body>
 </html>

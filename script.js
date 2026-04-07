@@ -91,19 +91,37 @@ function renderProducts(products) {
         }
 
         var delay = (pIdx % 8) * 0.08;
-        html += '<div class="product fade-up" data-category="' + p.category + '" onclick="openDetail(' + p.id + ')" style="transition-delay:' + delay + 's">' +
+        html += '<div class="product fade-up" data-category="' + p.category + '" data-id="' + p.id + '" style="transition-delay:' + delay + 's">' +
             '<div class="product-img">' + carouselHtml + '</div>' +
             '<div class="product-info">' +
                 '<h3>' + escapeHtml(p.name) + '</h3>' +
                 '<div class="product-desc">' + descHtml + '</div>' +
                 '<div class="product-footer">' +
                     '<span class="price">' + p.price.toLocaleString('ru-RU') + ' ₽</span>' +
-                    '<button class="add-to-cart" onclick="event.stopPropagation(); addToCart(' + p.id + ', \'' + p.name.replace(/'/g, "\\'") + '\', ' + p.price + ', \'' + (images.length > 0 ? images[0] : '') + '\')">В корзину</button>' +
+                    '<button class="add-to-cart" data-pid="' + p.id + '" data-pname="' + escapeHtml(p.name) + '" data-pprice="' + p.price + '" data-pimg="' + (images.length > 0 ? images[0] : '') + '">В корзину</button>' +
                 '</div>' +
             '</div>' +
         '</div>';
     });
     grid.innerHTML = html;
+
+    grid.querySelectorAll('.product').forEach(function(card) {
+        card.addEventListener('click', function() {
+            openDetail(Number(card.getAttribute('data-id')));
+        });
+    });
+
+    grid.querySelectorAll('.add-to-cart').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            addToCart(
+                Number(btn.getAttribute('data-pid')),
+                btn.getAttribute('data-pname'),
+                Number(btn.getAttribute('data-pprice')),
+                btn.getAttribute('data-pimg')
+            );
+        });
+    });
 
     var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
@@ -407,7 +425,7 @@ function addToCart(id, name, price, image) {
     saveCart(cart);
     updateCartCount();
     bounceCartCount();
-    showToast(name + ' добавлен в корзину');
+    showToast(escapeHtml(name) + ' добавлен в корзину');
 }
 
 function bounceCartCount() {
@@ -423,31 +441,6 @@ function bounceCartCount() {
         fab.classList.add('cart-bounce');
     }
 }
-
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    saveCart(cart);
-    updateCartCount();
-}
-
-function changeQty(index, delta) {
-    cart[index].qty += delta;
-    if (cart[index].qty <= 0) cart.splice(index, 1);
-    saveCart(cart);
-    updateCartCount();
-}
-
-function closeCart() {}
-
-function sendOrder(e) { e.preventDefault(); window.location.href = 'cart.html'; }
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeDetail();
-        closeCart();
-        closeZoom();
-    }
-});
 
 window.addEventListener('click', function(event) {
     if (event.target === document.getElementById('detail-modal')) closeDetail();
@@ -494,12 +487,16 @@ window.addEventListener('click', function(event) {
     });
 })();
 
+function isTouchDevice() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
+
 function initTilt() {
     var cards = document.querySelectorAll('.product');
     if (!cards.length) return;
-
     cards.forEach(function(card) {
         card.addEventListener('mousemove', function(e) {
+            if (isTouchDevice()) return;
             var rect = card.getBoundingClientRect();
             var x = e.clientX - rect.left;
             var y = e.clientY - rect.top;
@@ -509,20 +506,61 @@ function initTilt() {
             var rotateY = ((x - centerX) / centerX) * 6;
             card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-6px)';
         });
-
         card.addEventListener('mouseleave', function() {
             card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
         });
     });
 }
 
+(function initLetterpress() {
+    var h1 = document.querySelector('.hero h1');
+    if (!h1) return;
+    var accentOpen = '||AOPEN||';
+    var accentClose = '||ACLOSE||';
+    var html = h1.innerHTML;
+    html = html.replace(/<span class="accent">/g, accentOpen);
+    html = html.replace(/<\/span>/g, accentClose);
+    var chars = html.split('');
+    var result = '';
+    var delay = 0;
+    var inAccent = false;
+    for (var i = 0; i < chars.length; i++) {
+        var ch = chars[i];
+        if (html.substring(i, i + accentOpen.length) === accentOpen) {
+            inAccent = true;
+            result += '<span class="accent lp-accent-wrap">';
+            i += accentOpen.length - 1;
+            continue;
+        }
+        if (html.substring(i, i + accentClose.length) === accentClose) {
+            inAccent = false;
+            result += '</span>';
+            i += accentClose.length - 1;
+            continue;
+        }
+        if (ch === ' ') {
+            result += ' ';
+        } else {
+            var cls = inAccent ? 'lp-letter lp-accent' : 'lp-letter';
+            result += '<span class="' + cls + '" style="animation-delay:' + delay + 'ms">' + ch + '</span>';
+            delay += 55;
+        }
+    }
+    h1.innerHTML = result;
+})();
+
 (function initHeroParallax() {
     var heroContent = document.querySelector('.hero-content');
     if (!heroContent) return;
-    window.addEventListener('scroll', function() {
-        var scrollY = window.scrollY;
+    function updateParallax() {
+        var scrollY = window.lenisInstance ? window.lenisInstance.scroll : window.scrollY;
         if (scrollY > 800) return;
         heroContent.style.transform = 'translateY(' + (scrollY * 0.25) + 'px)';
         heroContent.style.opacity = 1 - (scrollY / 600);
-    });
+    }
+    if (window.lenisInstance) {
+        window.lenisInstance.on('scroll', updateParallax);
+    } else {
+        window.addEventListener('scroll', updateParallax);
+    }
 })();

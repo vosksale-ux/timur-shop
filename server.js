@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const crypto = require('crypto');
+var helmet = require('helmet');
+var compression = require('compression');
+var rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = 3000;
@@ -17,10 +20,6 @@ if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, '[]', 'utf-8');
 if (!fs.existsSync(SITE_DATA_FILE)) fs.writeFileSync(SITE_DATA_FILE, '{}', 'utf-8');
 
 var VALID_CATEGORIES = ['wallets', 'belts', 'bags', 'covers', 'accessories'];
-
-var loginAttempts = {};
-var LOGIN_LIMIT = 5;
-var LOGIN_WINDOW = 15 * 60 * 1000;
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) { cb(null, UPLOAD_DIR); },
@@ -61,6 +60,10 @@ if (!adminPassword) {
     process.exit(1);
 }
 
+app.use(helmet({
+    contentSecurityPolicy: false
+}));
+app.use(compression());
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname), {
@@ -74,6 +77,25 @@ app.use(express.static(path.join(__dirname), {
 app.use('/data', express.static(path.join(__dirname, 'data'), {
     setHeaders: function (res) { res.status(404).end(); }
 }));
+
+var apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 200,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Слишком много запросов' }
+});
+
+var loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Слишком много попыток. Попробуйте позже' }
+});
+
+app.use('/api/login', loginLimiter);
+app.use('/api', apiLimiter);
 
 function readProducts() {
     return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
@@ -101,15 +123,6 @@ function adminAuth(req, res, next) {
 }
 
 app.post('/api/login', function (req, res) {
-    var ip = req.ip || req.connection.remoteAddress;
-    var now = Date.now();
-    if (!loginAttempts[ip]) loginAttempts[ip] = [];
-    loginAttempts[ip] = loginAttempts[ip].filter(function(t) { return now - t < LOGIN_WINDOW; });
-    if (loginAttempts[ip].length >= LOGIN_LIMIT) {
-        return res.status(429).json({ error: 'Слишком много попыток. Попробуйте позже' });
-    }
-    loginAttempts[ip].push(now);
-
     var pass = req.body.password;
     if (pass === adminPassword) {
         res.json({ token: ADMIN_TOKEN });

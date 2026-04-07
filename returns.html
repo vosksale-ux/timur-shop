@@ -101,7 +101,7 @@
                     <p>Для оформления обмена свяжитесь с нами через WhatsApp или Telegram. Мы подберём подходящий вариант и организуем обмен.</p>
 
                     <h3>5. Гарантия качества</h3>
-                    <p>Все изделия TIMUR.SHOP изготавливаются из натуральной кожи с вниманием к каждому细节.</p>
+                    <p>Все изделия TIMUR.SHOP изготавливаются из натуральной кожи с вниманием к каждой стежку и каждой детали.</p>
                     <p>Если вы обнаружили производственный брак:</p>
                     <ul>
                         <li>Мы бесплатно заменим изделие на аналогичное.</li>
@@ -141,25 +141,5 @@
 
     <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="common.js"></script>
-    <script>
-        function toggleFaq(btn) {
-            var item = btn.parentElement;
-            var answer = item.querySelector('.faq-answer');
-            var icon = btn.querySelector('.faq-icon');
-            var isOpen = item.classList.contains('open');
-
-            document.querySelectorAll('.faq-item.open').forEach(function(openItem) {
-                openItem.classList.remove('open');
-                openItem.querySelector('.faq-answer').style.maxHeight = '0';
-                openItem.querySelector('.faq-icon').textContent = '+';
-            });
-
-            if (!isOpen) {
-                item.classList.add('open');
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-                icon.textContent = '−';
-            }
-        }
-    </script>
 </body>
 </html>

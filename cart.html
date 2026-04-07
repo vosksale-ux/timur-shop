@@ -157,14 +157,14 @@
                 total += subtotal;
 
                 var thumbHtml = item.image
-                    ? '<img src="' + item.image + '" alt="' + item.name + '" class="cart-item-thumb">'
+                    ? '<img src="' + item.image + '" alt="' + escapeHtml(item.name) + '" class="cart-item-thumb">'
                     : '<div class="cart-item-noimg">📦</div>';
 
                 listEl.innerHTML += '<div class="cart-list-item">' +
                     '<div class="cart-list-top">' +
                         thumbHtml +
                         '<div class="cart-list-info">' +
-                            '<h4>' + item.name + '</h4>' +
+                            '<h4>' + escapeHtml(item.name) + '</h4>' +
                             '<span class="cart-list-price">' + item.price.toLocaleString('ru-RU') + ' ₽</span>' +
                         '</div>' +
                     '</div>' +
@@ -180,7 +180,7 @@
                 '</div>';
 
                 summaryEl.innerHTML += '<div class="summary-row">' +
-                    '<span>' + item.name + ' x' + item.qty + '</span>' +
+                    '<span>' + escapeHtml(item.name) + ' x' + item.qty + '</span>' +
                     '<span>' + subtotal.toLocaleString('ru-RU') + ' ₽</span>' +
                 '</div>';
             });
